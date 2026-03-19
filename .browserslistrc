@@ -1,0 +1,16 @@
+# Target modern evergreen browsers only.
+# This prevents Next.js/Babel/SWC from emitting polyfills for features
+# natively supported in all browsers since ~2020 (e.g. Array.prototype.at,
+# Object.hasOwn, optional chaining, nullish coalescing).
+[production]
+chrome >= 91
+firefox >= 90
+safari >= 15
+edge >= 91
+not dead
+not op_mini all
+
+[development]
+last 1 chrome version
+last 1 firefox version
+last 1 safari version
