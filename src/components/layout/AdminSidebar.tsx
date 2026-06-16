@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FileText, Video, FolderGit2, BarChart3, ArrowUpRight } from 'lucide-react';
-import { UserButton } from '@clerk/nextjs';
+import { LayoutDashboard, FileText, Video, FolderGit2, BarChart3, ArrowUpRight, LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 
 const nav = [
@@ -26,6 +27,14 @@ function NNMark() {
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push('/');
+    router.refresh();
+  };
 
   return (
     <aside className="hidden md:flex flex-col w-52 shrink-0 min-h-screen border-r border-border/40 bg-background">
@@ -73,10 +82,13 @@ export function AdminSidebar() {
           <ArrowUpRight className="w-3.5 h-3.5" />
           View site
         </a>
-        <div className="flex items-center gap-2 px-3 py-2">
-          <UserButton afterSignOutUrl="/" />
-          <span className="text-xs text-muted-foreground">Account</span>
-        </div>
+        <button
+          onClick={handleSignOut}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors w-full"
+        >
+          <LogOut className="w-3.5 h-3.5" />
+          Sign out
+        </button>
       </div>
     </aside>
   );

@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import { withSentryConfig } from "@sentry/nextjs";
 
 // Directives are defined separately for readability
 const cspDirectives = [
@@ -13,10 +12,6 @@ const cspDirectives = [
     "'self'",
     "'unsafe-inline'",
     "'unsafe-eval'",
-    "https://clerk.com",
-    "https://*.clerk.accounts.dev",
-    "https://*.clerk.com",
-    "https://challenges.cloudflare.com", // Clerk bot protection
     "https://www.googletagmanager.com",
     "https://www.google-analytics.com",
   ].join(" "),
@@ -40,7 +35,6 @@ const cspDirectives = [
     "https://img.youtube.com",
     "https://www.googletagmanager.com",
     "https://www.google-analytics.com",
-    "https://img.clerk.com", // Clerk user avatar images
   ].join(" "),
 
   // API/WebSocket connections
@@ -49,27 +43,18 @@ const cspDirectives = [
     "'self'",
     "https://*.supabase.co",
     "wss://*.supabase.co",
-    "https://clerk.com",
-    "https://*.clerk.accounts.dev",
-    "https://*.clerk.com",
     "https://www.google-analytics.com",
     "https://www.googletagmanager.com",
     "https://api.github.com",
-    "https://*.sentry.io",        // Sentry error reporting
-    "https://*.ingest.sentry.io",
   ].join(" "),
 
-  // YouTube and Clerk auth iframes
+  // YouTube iframes
   [
     "frame-src",
     "https://www.youtube.com",
     "https://www.youtube-nocookie.com",
-    "https://accounts.clerk.dev",
-    "https://*.clerk.accounts.dev",
-    "https://challenges.cloudflare.com",
   ].join(" "),
 
-  // Clerk uses blob: URLs to spawn web workers (auth + CAPTCHA)
   "worker-src 'self' blob:",
 
   // Block Flash/plugins entirely
@@ -102,7 +87,6 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "*.supabase.co" },
       { protocol: "https", hostname: "i.ytimg.com" },
       { protocol: "https", hostname: "img.youtube.com" },
-      { protocol: "https", hostname: "img.clerk.com" },
     ],
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
@@ -142,22 +126,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
-  // Sentry organisation and project (set in CI/CD env vars)
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-
-  // Only upload source maps when SENTRY_AUTH_TOKEN is present (production builds)
-  authToken: process.env.SENTRY_AUTH_TOKEN,
-
-  // Suppress verbose Sentry CLI output
-  silent: !process.env.CI,
-
-  // Automatically tree-shake Sentry debug code in production
-  disableLogger: true,
-
-  // Upload source maps to Sentry and hide them from the browser bundle
-  sourcemaps: {
-    deleteSourcemapsAfterUpload: true,
-  },
-});
+export default nextConfig;

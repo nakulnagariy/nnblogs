@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, Eye, ArrowLeft } from 'lucide-react';
 import { getPostBySlug, incrementPostViews, getRelatedPosts } from '@/lib/supabase/queries';
-import { MarkdownRenderer, BlogPostClientWrapper, TableOfContents, PostSummary } from '@/components/blog';
+import { MarkdownRenderer, BlogPostClientWrapper, TableOfContents } from '@/components/blog';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { formatDate, getReadingTime } from '@/lib/utils';
 import { extractHeadings } from '@/lib/markdown';
@@ -112,9 +112,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 />
               </div>
             )}
-
-            {/* AI Quick Summary */}
-            <PostSummary content={post.content} slug={slug} />
 
             {/* Content */}
             <div className="py-10">

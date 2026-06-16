@@ -1,6 +1,6 @@
 import React from 'react';
-import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
+import { createSessionClient } from '@/lib/supabase/server';
 import { AdminSidebar } from '@/components/layout/AdminSidebar';
 
 export default async function AdminLayout({
@@ -8,9 +8,10 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = await auth();
+  const supabase = await createSessionClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  if (!userId) {
+  if (!user) {
     redirect('/sign-in');
   }
 

@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { Inter } from 'next/font/google';
-import { ClerkProvider } from '@clerk/nextjs';
 import { QueryProvider } from '@/components/providers/QueryProvider';
+import { SupabaseProvider } from '@/components/providers/SupabaseProvider';
+import { createSessionClient } from '@/lib/supabase/server';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { GoogleAnalytics } from '@/components/analytics';
 import { Header } from '@/components/layout/Header';
@@ -49,13 +50,16 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const supabase = await createSessionClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
   return (
-    <ClerkProvider>
+    <SupabaseProvider initialUser={user}>
       <html lang="en" suppressHydrationWarning>
         <body className={`${inter.variable} font-sans antialiased`}>
           <ThemeProvider
@@ -78,6 +82,6 @@ export default function RootLayout({
           </ThemeProvider>
         </body>
       </html>
-    </ClerkProvider>
+    </SupabaseProvider>
   );
 }

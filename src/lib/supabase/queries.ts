@@ -1,5 +1,7 @@
 import { unstable_cache } from "next/cache";
-import { supabase } from "./client";
+import { createClient } from "./client";
+
+const supabase = createClient();
 import type {
   BlogPost,
   Video,
