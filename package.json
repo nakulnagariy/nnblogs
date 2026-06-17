@@ -41,6 +41,7 @@
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.104.2",
     "@commitlint/cli": "^20.4.1",
     "@commitlint/config-conventional": "^20.4.1",
     "@tailwindcss/postcss": "^4",

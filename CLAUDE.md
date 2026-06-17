@@ -90,8 +90,9 @@ Deeper domain context, styling frameworks, testing philosophies, and structured 
 ---
 
 > UPDATE THIS AFTER EACH SESSION
-> Phase: [Research / Architecture / Implementation / QA / Deployment]
-> Current Epic: [e.g., "Epic 4 — Content Migration"]
-> Current US: [e.g., "US-4.1 — Content Generation"]
-> Last completed: [e.g., "Generated 47/82 placeholder topics"]
-> Next action: [e.g., "Continue content generation from react-hooks/use-callback"]
+> Phase: Architecture
+> Current Epic: Epic 2 — Architecture & Schema Design
+> Current US: US-2.1 — Schema Design & CMS Decision
+> Last completed: Phase 2 Architecture complete — schema SQL written (13 tables, RLS, ENUMs, category seed), CMS decision ADR (Supabase selected), transformation rules documented. All 5 Phase 1 recommendations confirmed by user. Human approval gate pending before running schema against Supabase.
+> Deliverables: docs/reports/schema-migration.sql | docs/reports/cms-decision.md | docs/reports/transformation-rules.md
+> Next action: ✋ HUMAN GATE — Review schema-migration.sql and cms-decision.md, then approve to proceed to Phase 3 (Planning: Epic/Story breakdown, orchestrator scaffolding, migration pipeline skeleton).

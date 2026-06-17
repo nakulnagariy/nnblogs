@@ -256,7 +256,7 @@ Output:
 ### Session 2 — Architecture Decisions
 
 ```
-Read the research report from yesterday: docs/reports/research-report.md
+Read the research report: docs/reports/research-report.md
 Read the full spec: docs/improved-prompt-v3-final.md (Part 2, Objectives 1 and 5)
 
 Now:
@@ -270,6 +270,12 @@ I need to review and approve all three before we proceed to implementation.
 ### Session 3 — Build the Pipeline
 
 ```
+I have reviewed schema-migration.sql and cms-decision.md,
+
+**Final Decision:** Use Supabase (PostgreSQL) as the single CMS for all interview prep content.
+
+then approve to proceed to Phase 3 (Planning: Epic/Story breakdown, orchestrator scaffolding, migration pipeline skeleton).
+
 Read the approved schema from docs/schema-migration.sql
 Read docs/improved-prompt-v3-final.md Part 3 (Agentic System Design)
 

@@ -1,0 +1,83 @@
+{
+  "version": "1.0",
+  "sessionId": "efd543e9-368c-4eb4-ad43-fb438d57dccd",
+  "startedAt": "2026-06-17T13:43:29.062Z",
+  "lastUpdated": "2026-06-17T15:45:56.284Z",
+  "targetCategories": [
+    "js-core"
+  ],
+  "qualityGate": {
+    "enabled": true,
+    "gateAt": 3,
+    "completedCount": 6,
+    "approved": false
+  },
+  "topics": {
+    "js-core/arrow-function-vs-regular-function": {
+      "status": "completed",
+      "startedAt": "2026-06-17T13:43:29.087Z",
+      "completedAt": "2026-06-17T13:44:26.137Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "js-core/callback-hell-pyramid-of-doom": {
+      "status": "completed",
+      "startedAt": "2026-06-17T13:44:27.086Z",
+      "completedAt": "2026-06-17T13:45:13.814Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "js-core/closure-scope-chain": {
+      "status": "completed",
+      "startedAt": "2026-06-17T13:45:14.782Z",
+      "completedAt": "2026-06-17T13:45:54.048Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "js-core/debounce-throttle-implement-from-scratch": {
+      "status": "completed",
+      "startedAt": "2026-06-17T15:43:18.875Z",
+      "completedAt": "2026-06-17T15:44:04.718Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "js-core/deep-clone-structuredclone-vs-json-vs-lodash": {
+      "status": "completed",
+      "startedAt": "2026-06-17T15:44:05.656Z",
+      "completedAt": "2026-06-17T15:44:47.674Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "js-core/event-delegation-bubbling-capturing": {
+      "status": "completed",
+      "startedAt": "2026-06-17T15:44:48.631Z",
+      "completedAt": "2026-06-17T15:45:56.284Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    }
+  },
+  "cost": {
+    "totalUsd": 0.08647439999999999,
+    "byAgent": {}
+  }
+}
