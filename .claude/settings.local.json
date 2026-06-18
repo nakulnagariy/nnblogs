@@ -10,7 +10,8 @@
       "Bash(npm uninstall *)",
       "Bash(npx tsx *)",
       "Bash(python3 -c \"import sys,json; [print\\(json.dumps\\({'taskId': json.loads\\(l\\)['task_id'], 'cost': json.loads\\(l\\)['estimated_cost_usd']}\\)\\) for l in sys.stdin]\")",
-      "Bash(findstr \"task_id\")"
+      "Bash(findstr \"task_id\")",
+      "Bash(python3 -c ' *)"
     ]
   }
 }

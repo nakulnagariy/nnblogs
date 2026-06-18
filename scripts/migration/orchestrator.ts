@@ -47,16 +47,35 @@ function parseArgs(): {
   dryRun: boolean;
 } {
   const args = process.argv.slice(2);
-  const get = (flag: string): string | undefined => {
-    const idx = args.indexOf(flag);
-    return idx >= 0 ? args[idx + 1] : undefined;
-  };
   const has = (flag: string) => args.includes(flag);
 
+  // Collect --categories: handles 3 PowerShell behaviours:
+  //  1. "a,b,c" passed as a single arg (quoted in PS)
+  //  2. "a b c" passed as a single space-joined string (PS serialises unquoted array)
+  //  3. "a" "b" "c" passed as separate positional args (rare but possible)
+  const catIdx = args.indexOf('--categories');
+  let categories = ['js-core'];
+  if (catIdx >= 0) {
+    const raw: string[] = [];
+    for (let i = catIdx + 1; i < args.length; i++) {
+      const arg = args[i];
+      if (arg === undefined || arg.startsWith('--')) break;
+      raw.push(arg);
+    }
+    // Join everything, then split on commas or whitespace
+    categories = raw.join(' ').split(/[,\s]+/).filter(Boolean);
+  }
+
+  // --limit: default 3 for quality gate; if --approve-gate set with no explicit limit, run all
+  const limitIdx = args.indexOf('--limit');
+  const explicitLimit = limitIdx >= 0 ? parseInt(args[limitIdx + 1] ?? '3', 10) : null;
+  const approveGate = has('--approve-gate');
+  const limit = explicitLimit ?? (approveGate ? 10_000 : 3);
+
   return {
-    categories: (get('--categories') ?? 'js-core').split(',').map(s => s.trim()),
-    limit: parseInt(get('--limit') ?? '3', 10),
-    approveGate: has('--approve-gate'),
+    categories,
+    limit,
+    approveGate,
     resume: has('--resume'),
     dryRun: has('--dry-run'),
   };

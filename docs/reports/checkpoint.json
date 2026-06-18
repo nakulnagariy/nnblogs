@@ -1,22 +1,28 @@
 {
   "version": "1.0",
-  "sessionId": "efd543e9-368c-4eb4-ad43-fb438d57dccd",
-  "startedAt": "2026-06-17T13:43:29.062Z",
-  "lastUpdated": "2026-06-17T15:45:56.284Z",
+  "sessionId": "04b4bffb-0788-4ff6-bd4e-5870da153401",
+  "startedAt": "2026-06-18T02:09:56.129Z",
+  "lastUpdated": "2026-06-18T04:33:42.809Z",
   "targetCategories": [
-    "js-core"
+    "arrays-objects",
+    "async-js",
+    "css-html",
+    "performance-tooling",
+    "practical-js",
+    "react-angular",
+    "react-fu"
   ],
   "qualityGate": {
     "enabled": true,
     "gateAt": 3,
-    "completedCount": 6,
+    "completedCount": 108,
     "approved": false
   },
   "topics": {
-    "js-core/arrow-function-vs-regular-function": {
+    "arrays-objects/array-from-array-of-spread-vs-rest": {
       "status": "completed",
-      "startedAt": "2026-06-17T13:43:29.087Z",
-      "completedAt": "2026-06-17T13:44:26.137Z",
+      "startedAt": "2026-06-18T02:09:56.162Z",
+      "completedAt": "2026-06-18T02:11:08.952Z",
       "generated": [
         "notes",
         "example",
@@ -24,52 +30,1107 @@
       ],
       "loaded": true
     },
-    "js-core/callback-hell-pyramid-of-doom": {
+    "arrays-objects/date-api-formatting-timezones-intl-datetimeformat": {
       "status": "completed",
-      "startedAt": "2026-06-17T13:44:27.086Z",
-      "completedAt": "2026-06-17T13:45:13.814Z",
+      "startedAt": "2026-06-18T02:11:09.888Z",
+      "completedAt": "2026-06-18T02:12:07.937Z",
       "generated": [
         "example",
         "assessment"
       ],
       "loaded": true
     },
-    "js-core/closure-scope-chain": {
+    "arrays-objects/destructuring-defaults-renaming-nested": {
       "status": "completed",
-      "startedAt": "2026-06-17T13:45:14.782Z",
-      "completedAt": "2026-06-17T13:45:54.048Z",
-      "generated": [
-        "example",
-        "assessment"
-      ],
-      "loaded": true
-    },
-    "js-core/debounce-throttle-implement-from-scratch": {
-      "status": "completed",
-      "startedAt": "2026-06-17T15:43:18.875Z",
-      "completedAt": "2026-06-17T15:44:04.718Z",
-      "generated": [
-        "example",
-        "assessment"
-      ],
-      "loaded": true
-    },
-    "js-core/deep-clone-structuredclone-vs-json-vs-lodash": {
-      "status": "completed",
-      "startedAt": "2026-06-17T15:44:05.656Z",
-      "completedAt": "2026-06-17T15:44:47.674Z",
-      "generated": [
-        "example",
-        "assessment"
-      ],
-      "loaded": true
-    },
-    "js-core/event-delegation-bubbling-capturing": {
-      "status": "completed",
-      "startedAt": "2026-06-17T15:44:48.631Z",
-      "completedAt": "2026-06-17T15:45:56.284Z",
+      "startedAt": "2026-06-18T02:12:08.863Z",
+      "completedAt": "2026-06-18T02:13:10.172Z",
       "generated": [
         "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "async-js/async-await-error-handling-patterns": {
+      "status": "completed",
+      "startedAt": "2026-06-18T02:48:41.831Z",
+      "completedAt": "2026-06-18T02:49:59.455Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "async-js/async-iterators-for-await-of": {
+      "status": "completed",
+      "startedAt": "2026-06-18T02:50:00.494Z",
+      "completedAt": "2026-06-18T02:51:05.915Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "async-js/async-microtask-prediction": {
+      "status": "completed",
+      "startedAt": "2026-06-18T02:51:06.849Z",
+      "completedAt": "2026-06-18T02:52:15.603Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "async-js/cancellable-promises-abortcontroller": {
+      "status": "completed",
+      "startedAt": "2026-06-18T02:52:16.564Z",
+      "completedAt": "2026-06-18T02:53:37.663Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "async-js/concurrency-limiter": {
+      "status": "completed",
+      "startedAt": "2026-06-18T02:53:38.604Z",
+      "completedAt": "2026-06-18T02:54:30.058Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "async-js/concurrency-limiter-n-at-a-time": {
+      "status": "completed",
+      "startedAt": "2026-06-18T02:54:31.022Z",
+      "completedAt": "2026-06-18T02:55:48.371Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "async-js/implement-retrywithbackoff": {
+      "status": "completed",
+      "startedAt": "2026-06-18T02:55:49.304Z",
+      "completedAt": "2026-06-18T02:57:09.257Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "async-js/microtask-queue-output-prediction": {
+      "status": "completed",
+      "startedAt": "2026-06-18T02:57:10.193Z",
+      "completedAt": "2026-06-18T02:58:10.535Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "async-js/promise-all-vs-allsettled-vs-race-vs-any": {
+      "status": "completed",
+      "startedAt": "2026-06-18T02:58:11.480Z",
+      "completedAt": "2026-06-18T02:58:47.793Z",
+      "generated": [
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "async-js/promises-states-chaining-combinators": {
+      "status": "completed",
+      "startedAt": "2026-06-18T02:58:48.729Z",
+      "completedAt": "2026-06-18T02:59:43.649Z",
+      "generated": [
+        "notes",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/accessibility-aria-roles-focus-management": {
+      "status": "completed",
+      "startedAt": "2026-06-18T02:59:44.584Z",
+      "completedAt": "2026-06-18T03:00:43.974Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/box-model-content-padding-border-margin": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:00:44.902Z",
+      "completedAt": "2026-06-18T03:01:53.967Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/css-custom-properties-theming": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:01:54.922Z",
+      "completedAt": "2026-06-18T03:02:45.280Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/css-grid-areas-auto-fill-vs-auto-fit-minmax": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:02:46.219Z",
+      "completedAt": "2026-06-18T03:03:45.771Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/flexbox-vs-grid-when-to-use-which": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:03:46.754Z",
+      "completedAt": "2026-06-18T03:04:50.952Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/html-meta-tags-viewport-og-charset": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:04:51.913Z",
+      "completedAt": "2026-06-18T03:05:45.460Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/pseudo-classes-vs-pseudo-elements": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:05:46.415Z",
+      "completedAt": "2026-06-18T03:07:00.007Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/responsive-design-media-queries-container-queries": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:07:00.967Z",
+      "completedAt": "2026-06-18T03:08:03.582Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/scss-nesting-mixins-functions-extends": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:08:04.540Z",
+      "completedAt": "2026-06-18T03:09:02.741Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/semantic-html-why-it-matters-seo-a11y": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:09:03.713Z",
+      "completedAt": "2026-06-18T03:09:59.896Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/specificity-calculation-important-pitfalls": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:10:00.873Z",
+      "completedAt": "2026-06-18T03:11:17.515Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "css-html/stacking-context-z-index-gotchas": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:11:18.472Z",
+      "completedAt": "2026-06-18T03:12:38.626Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "performance-tooling/browser-rendering-pipeline-parse-layout-paint-composite": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:12:39.591Z",
+      "completedAt": "2026-06-18T03:13:40.118Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "performance-tooling/core-web-vitals-lcp-fid-inp-cls": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:13:41.047Z",
+      "completedAt": "2026-06-18T03:14:49.449Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "performance-tooling/http-methods-rest-constraints": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:14:50.384Z",
+      "completedAt": "2026-06-18T03:16:04.651Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "performance-tooling/lazy-loading-images-routes-components": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:16:05.584Z",
+      "completedAt": "2026-06-18T03:16:59.149Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "performance-tooling/security-xss-csrf-cors-csp-headers": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:17:00.090Z",
+      "completedAt": "2026-06-18T03:18:08.473Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "performance-tooling/virtualization-react-window-when-why": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:18:09.422Z",
+      "completedAt": "2026-06-18T03:19:31.014Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "performance-tooling/vite-vs-webpack-how-vites-esm-dev-server-works": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:19:31.946Z",
+      "completedAt": "2026-06-18T03:20:35.631Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "performance-tooling/web-app-performance": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:20:36.564Z",
+      "completedAt": "2026-06-18T03:21:37.996Z",
+      "generated": [
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "performance-tooling/webpack-loaders-plugins-tree-shaking-code-splitting": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:21:38.930Z",
+      "completedAt": "2026-06-18T03:22:40.607Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "practical-js/array-object-practice.md": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:22:41.544Z",
+      "completedAt": "2026-06-18T03:23:55.566Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "practical-js/part1-javascript.md": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:23:56.510Z",
+      "completedAt": "2026-06-18T03:24:57.169Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "practical-js/part2-typescript-react.md": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:24:58.122Z",
+      "completedAt": "2026-06-18T03:26:15.399Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "practical-js/part3-dsa.md": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:26:16.332Z",
+      "completedAt": "2026-06-18T03:27:22.082Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "react-angular/90-second-intro-pitch": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:27:23.019Z",
+      "completedAt": "2026-06-18T03:28:33.226Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "react-angular/cv-alignment-checklist": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:28:34.184Z",
+      "completedAt": "2026-06-18T03:29:55.161Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "react-angular/popular-design-patterns-with-examples": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:29:56.092Z",
+      "completedAt": "2026-06-18T03:30:43.452Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "react-angular/react-hooks-vs-angular": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:30:44.388Z",
+      "completedAt": "2026-06-18T03:31:40.059Z",
+      "generated": [
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "react-angular/react-hooks-vs-angular-lifecycle-services": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:31:41.006Z",
+      "completedAt": "2026-06-18T03:32:48.828Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "react-angular/react-vs-angular": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:32:49.764Z",
+      "completedAt": "2026-06-18T03:33:49.587Z",
+      "generated": [
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "react-angular/react-vs-angular-architecture-philosophy": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:33:50.521Z",
+      "completedAt": "2026-06-18T03:34:59.980Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "react-angular/scor-rup-90-second-intro": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:35:00.913Z",
+      "completedAt": "2026-06-18T03:36:00.659Z",
+      "generated": [
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "react-angular/scor-rup-cv-alignment-checklist": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:36:01.591Z",
+      "completedAt": "2026-06-18T03:37:05.488Z",
+      "generated": [
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "react-angular/scor-rup-react-expert-interview-prep": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:37:06.417Z",
+      "completedAt": "2026-06-18T03:38:16.456Z",
+      "generated": [
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "react-angular/scor-rup-react-expert-mock-interview": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:38:17.381Z",
+      "completedAt": "2026-06-18T03:39:23.694Z",
+      "generated": [
+        "example",
+        "assessment",
+        "flashcards"
+      ],
+      "loaded": true
+    },
+    "react-angular/senior-react-expert-interview-prep": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:39:24.634Z",
+      "completedAt": "2026-06-18T03:40:42.998Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "react-angular/senior-react-expert-mock-interview": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:40:43.927Z",
+      "completedAt": "2026-06-18T03:41:59.362Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "react-fundamentals/class-lifecycle-vs-hooks-equivalents": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:42:00.292Z",
+      "completedAt": "2026-06-18T03:42:18.297Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-fundamentals/controlled-vs-uncontrolled-components": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:42:19.237Z",
+      "completedAt": "2026-06-18T03:42:35.873Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-fundamentals/error-boundaries-class-only-placement-strategy": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:42:36.817Z",
+      "completedAt": "2026-06-18T03:43:01.796Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-fundamentals/keys-why-they-matter-bad-key-patterns": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:43:02.715Z",
+      "completedAt": "2026-06-18T03:43:52.187Z",
+      "generated": [
+        "notes",
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-fundamentals/react-fiber-what-it-solved-incremental-rendering": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:43:53.132Z",
+      "completedAt": "2026-06-18T03:44:14.798Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-fundamentals/react-strict-mode-behavior": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:44:15.747Z",
+      "completedAt": "2026-06-18T03:44:54.098Z",
+      "generated": [
+        "notes",
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-fundamentals/synthetic-events-event-pooling": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:44:55.049Z",
+      "completedAt": "2026-06-18T03:45:36.326Z",
+      "generated": [
+        "notes",
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-fundamentals/virtual-dom-reconciliation": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:45:37.270Z",
+      "completedAt": "2026-06-18T03:45:58.390Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-hooks/custom-hooks-design-patterns-rules-of-hooks": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:45:59.381Z",
+      "completedAt": "2026-06-18T03:46:40.949Z",
+      "generated": [
+        "notes",
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-hooks/usecontext-performance-gotchas-re-render-scope": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:46:41.886Z",
+      "completedAt": "2026-06-18T03:46:50.484Z",
+      "generated": [],
+      "loaded": true
+    },
+    "react-hooks/useeffect-deps-array-cleanup-common-mistakes": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:46:51.411Z",
+      "completedAt": "2026-06-18T03:47:13.407Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-hooks/useimperativehandle-forwardref": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:47:14.335Z",
+      "completedAt": "2026-06-18T03:47:54.777Z",
+      "generated": [
+        "notes",
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-hooks/uselayouteffect-vs-useeffect-timing-difference": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:47:55.711Z",
+      "completedAt": "2026-06-18T03:48:34.163Z",
+      "generated": [
+        "notes",
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-hooks/usememo-vs-usecallback-when-each-actually-helps": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:48:35.134Z",
+      "completedAt": "2026-06-18T03:49:32.179Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "react-hooks/usereducer-when-to-choose-over-usestate": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:49:33.105Z",
+      "completedAt": "2026-06-18T03:50:16.902Z",
+      "generated": [
+        "notes",
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-hooks/useref-dom-refs-vs-mutable-values": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:50:17.848Z",
+      "completedAt": "2026-06-18T03:50:37.213Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-hooks/usestate-batching-functional-updates-stale-closure": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:50:38.144Z",
+      "completedAt": "2026-06-18T03:51:04.758Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-hooks/usetransition-usedeferredvalue": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:51:05.687Z",
+      "completedAt": "2026-06-18T03:51:25.185Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-patterns-architecture/code-splitting-react-lazy-suspense-dynamic-import": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:51:26.115Z",
+      "completedAt": "2026-06-18T03:51:45.099Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-patterns-architecture/compound-components-context-based-apis": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:51:46.057Z",
+      "completedAt": "2026-06-18T03:52:06.524Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-patterns-architecture/hoc-vs-custom-hook-vs-render-props": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:52:07.471Z",
+      "completedAt": "2026-06-18T03:52:34.092Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-patterns-architecture/micro-frontend-architecture": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:52:35.021Z",
+      "completedAt": "2026-06-18T03:53:23.602Z",
+      "generated": [
+        "notes",
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-patterns-architecture/performance-memo-virtualization-avoiding-re-renders": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:53:24.542Z",
+      "completedAt": "2026-06-18T03:54:36.881Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "react-patterns-architecture/prop-drilling-when-it-becomes-a-problem-solutions": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:54:37.820Z",
+      "completedAt": "2026-06-18T03:54:47.137Z",
+      "generated": [],
+      "loaded": true
+    },
+    "react-patterns-architecture/react-query-swr-caching-stale-while-revalidate": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:54:48.063Z",
+      "completedAt": "2026-06-18T03:55:15.370Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-patterns-architecture/redux-toolkit-slices-thunks-rtk-query": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:55:16.294Z",
+      "completedAt": "2026-06-18T03:56:04.719Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "react-patterns-architecture/ssr-vs-ssg-vs-csr-trade-offs": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:56:05.681Z",
+      "completedAt": "2026-06-18T03:56:29.677Z",
+      "generated": [
+        "example"
+      ],
+      "loaded": true
+    },
+    "react-patterns-architecture/state-management-usestate-usereducer-context-redux": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:56:30.603Z",
+      "completedAt": "2026-06-18T03:57:39.243Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "shared/assessment.js": {
+      "status": "failed",
+      "startedAt": "2026-06-18T03:57:40.183Z",
+      "generated": [],
+      "loaded": false,
+      "error": "Category not found: shared. Run schema migration first."
+    },
+    "system-design/api-design-rest-vs-graphql-vs-trpc": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:58:54.085Z",
+      "completedAt": "2026-06-18T03:59:53.519Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "system-design/authentication-authorisation-patterns": {
+      "status": "completed",
+      "startedAt": "2026-06-18T03:59:54.456Z",
+      "completedAt": "2026-06-18T04:01:11.436Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "system-design/cdn-and-caching-strategies": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:01:12.396Z",
+      "completedAt": "2026-06-18T04:02:33.673Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "system-design/database-selection-sql-vs-nosql-trade-offs": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:02:34.644Z",
+      "completedAt": "2026-06-18T04:03:34.474Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "system-design/design-a-news-feed-social-timeline": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:03:35.416Z",
+      "completedAt": "2026-06-18T04:04:35.715Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "system-design/design-a-rate-limiter": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:04:36.663Z",
+      "completedAt": "2026-06-18T04:06:00.750Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "system-design/design-a-real-time-chat-system": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:06:01.682Z",
+      "completedAt": "2026-06-18T04:07:24.890Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "system-design/design-a-type-ahead-autocomplete": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:07:26.018Z",
+      "completedAt": "2026-06-18T04:08:44.763Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "system-design/design-a-url-shortener": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:08:45.891Z",
+      "completedAt": "2026-06-18T04:10:11.527Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "system-design/frontend-architecture-spa-vs-mpa-vs-mfe": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:10:12.540Z",
+      "completedAt": "2026-06-18T04:11:08.497Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "system-design/observability-logging-metrics-tracing": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:11:09.439Z",
+      "completedAt": "2026-06-18T04:12:36.769Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "system-design/scalability-patterns-horizontal-vs-vertical-scaling": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:12:37.825Z",
+      "completedAt": "2026-06-18T04:13:40.367Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "testing/e2e-testing-playwright-cypress-philosophy": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:13:41.325Z",
+      "completedAt": "2026-06-18T04:14:47.723Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "testing/jest-mocking-spies-timers-module-mocks": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:14:48.687Z",
+      "completedAt": "2026-06-18T04:15:42.953Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "testing/msw-intercepting-at-network-level": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:15:43.898Z",
+      "completedAt": "2026-06-18T04:16:42.980Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "testing/react-testing-library-queries-user-event-philosophy": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:16:44.091Z",
+      "completedAt": "2026-06-18T04:18:01.976Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "testing/rtl-vs-enzyme-why-rtl-won": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:18:03.111Z",
+      "completedAt": "2026-06-18T04:19:09.498Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "testing/snapshot-testing-when-useful-when-harmful": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:19:12.113Z",
+      "completedAt": "2026-06-18T04:20:17.691Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "testing/testing-async-code-waitfor-findby-act": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:20:20.866Z",
+      "completedAt": "2026-06-18T04:21:25.819Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "testing/testing-custom-hooks-renderhook": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:21:27.993Z",
+      "completedAt": "2026-06-18T04:23:59.755Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "typescript/any-vs-unknown-vs-never-type-safety-implications": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:24:01.887Z",
+      "completedAt": "2026-06-18T04:25:07.740Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "typescript/declaration-merging-module-augmentation": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:25:09.399Z",
+      "completedAt": "2026-06-18T04:26:20.439Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "typescript/generics-constraints-defaults-infer": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:26:22.427Z",
+      "completedAt": "2026-06-18T04:27:38.995Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "typescript/mapped-types-conditional-types": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:27:41.181Z",
+      "completedAt": "2026-06-18T04:28:54.066Z",
+      "generated": [
+        "notes",
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "typescript/strict-mode-flags-what-each-enforces": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:28:55.036Z",
+      "completedAt": "2026-06-18T04:29:48.076Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "typescript/type-narrowing-typeof-instanceof-in-custom-guards": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:29:49.104Z",
+      "completedAt": "2026-06-18T04:30:40.800Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "typescript/type-vs-interface-key-differences-when-to-use": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:30:41.821Z",
+      "completedAt": "2026-06-18T04:31:41.948Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "typescript/union-intersection-types-discriminated-unions": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:31:43.079Z",
+      "completedAt": "2026-06-18T04:32:38.917Z",
+      "generated": [
+        "example",
+        "assessment"
+      ],
+      "loaded": true
+    },
+    "typescript/utility-types-partial-required-pick-omit-record": {
+      "status": "completed",
+      "startedAt": "2026-06-18T04:32:40.464Z",
+      "completedAt": "2026-06-18T04:33:42.809Z",
+      "generated": [
         "example",
         "assessment"
       ],
@@ -77,7 +1138,7 @@
     }
   },
   "cost": {
-    "totalUsd": 0.08647439999999999,
+    "totalUsd": 3.2931384,
     "byAgent": {}
   }
 }

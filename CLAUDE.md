@@ -90,9 +90,27 @@ Deeper domain context, styling frameworks, testing philosophies, and structured 
 ---
 
 > UPDATE THIS AFTER EACH SESSION
-> Phase: Architecture
-> Current Epic: Epic 2 — Architecture & Schema Design
-> Current US: US-2.1 — Schema Design & CMS Decision
-> Last completed: Phase 2 Architecture complete — schema SQL written (13 tables, RLS, ENUMs, category seed), CMS decision ADR (Supabase selected), transformation rules documented. All 5 Phase 1 recommendations confirmed by user. Human approval gate pending before running schema against Supabase.
-> Deliverables: docs/reports/schema-migration.sql | docs/reports/cms-decision.md | docs/reports/transformation-rules.md
-> Next action: ✋ HUMAN GATE — Review schema-migration.sql and cms-decision.md, then approve to proceed to Phase 3 (Planning: Epic/Story breakdown, orchestrator scaffolding, migration pipeline skeleton).
+> Phase: Implementation
+> Current Epic: Epic 4 — Content Migration Pipeline
+> Current US: US-4.2 — Batch content generation across all categories
+>
+> Last completed:
+> - Phase 2: Schema applied to Supabase (13 tables, RLS, ENUMs, 13 category seed rows). ADR-001 confirmed: Supabase as single CMS.
+> - Phase 3: Migration pipeline built — scripts/migration/{types,cost-tracker,analyzer,generator,loader,orchestrator}.ts. All TypeScript errors resolved.
+> - Phase 4 (partial): js-core category fully processed — 18 topics, 4 content types + 4 interview questions each. Quality gate passed by user. Total cost: ~$0.09 for 3 topics at $0.03/topic with claude-haiku-4-5-20251001.
+>
+> Checkpoint state: docs/reports/checkpoint.json (js-core: 3 topics completed, quality gate approved)
+> Cost log: docs/reports/cost-log.jsonl
+>
+> Remaining categories (13 total, 1 done):
+>   arrays-objects | async-js | css-html | performance-tooling | practical-js
+>   react-angular | react-fundamentals | react-hooks | react-patterns-architecture
+>   shared | system-design | testing | typescript
+>
+> Next action: Run orchestrator for each remaining category (or all at once):
+>   npx tsx scripts/migration/orchestrator.ts --categories arrays-objects,async-js,css-html,performance-tooling,practical-js,react-angular,react-fundamentals,react-hooks,react-patterns-architecture,shared,system-design,testing,typescript --approve-gate
+>
+> Key commands:
+>   Dry run:  npx tsx scripts/migration/orchestrator.ts --categories <cat> --dry-run
+>   Resume:   npx tsx scripts/migration/orchestrator.ts --categories <cat> --resume --approve-gate
+>   Full run: npx tsx scripts/migration/orchestrator.ts --categories <all> --approve-gate
