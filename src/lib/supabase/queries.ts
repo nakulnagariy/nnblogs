@@ -9,6 +9,12 @@ import type {
   Category,
   SearchResult,
   PaginatedResponse,
+  TopicCategory,
+  Topic,
+  TopicDetail,
+  Flashcard,
+  InterviewQuestion,
+  Difficulty,
 } from "@/types";
 
 // Blog Posts
@@ -251,6 +257,14 @@ export async function searchContent(query: string): Promise<SearchResult[]> {
     .or(`name.ilike.${searchTerm},description.ilike.${searchTerm}`)
     .limit(10);
 
+  // Search topics
+  const { data: topics } = await supabase
+    .from("topics")
+    .select("id, title, slug, category_id, category:topic_categories(slug), created_at")
+    .eq("status", "published")
+    .ilike("title", searchTerm)
+    .limit(10);
+
   const results: SearchResult[] = [
     ...(posts || []).map((post) => ({
       id: post.id,
@@ -277,6 +291,15 @@ export async function searchContent(query: string): Promise<SearchResult[]> {
       slug: project.name.toLowerCase().replace(/\s+/g, "-"),
       excerpt: project.description,
       created_at: project.created_at,
+    })),
+    ...(topics || []).map((topic) => ({
+      id: topic.id,
+      type: "topic" as const,
+      title: topic.title,
+      slug: topic.slug,
+      excerpt: "",
+      category: Array.isArray(topic.category) ? (topic.category[0]?.slug ?? "") : (topic.category as { slug: string } | null)?.slug ?? "",
+      created_at: topic.created_at,
     })),
   ];
 
@@ -339,4 +362,146 @@ export async function getRelatedVideos(
 
   if (error) throw error;
   return data || [];
+}
+
+// ─── Interview Prep Queries ───────────────────────────────────────────────────
+
+export async function getTopicCategories(): Promise<TopicCategory[]> {
+  const { data, error } = await supabase
+    .from("topic_categories")
+    .select("*, topics(count)")
+    .order("sort_order");
+
+  if (error) throw error;
+
+  return (data || []).map((row) => ({
+    ...row,
+    topic_count: (row.topics as { count: number }[])?.[0]?.count ?? 0,
+  }));
+}
+
+export async function getTopicsByCategory(
+  categorySlug: string,
+  page: number = 1,
+  pageSize: number = 20,
+  difficulty?: Difficulty,
+): Promise<PaginatedResponse<Topic>> {
+  const { data: category } = await supabase
+    .from("topic_categories")
+    .select("id")
+    .eq("slug", categorySlug)
+    .single();
+
+  if (!category) return { data: [], total: 0, page, pageSize, totalPages: 0 };
+
+  let query = supabase
+    .from("topics")
+    .select("*, category:topic_categories(*)", { count: "exact" })
+    .eq("category_id", category.id)
+    .eq("status", "published")
+    .order("sort_order");
+
+  if (difficulty) {
+    query = query.eq("difficulty", difficulty);
+  }
+
+  const from = (page - 1) * pageSize;
+  const { data, error, count } = await query.range(from, from + pageSize - 1);
+
+  if (error) throw error;
+
+  return {
+    data: (data || []) as Topic[],
+    total: count || 0,
+    page,
+    pageSize,
+    totalPages: Math.ceil((count || 0) / pageSize),
+  };
+}
+
+export async function getTopicBySlug(
+  categorySlug: string,
+  topicSlug: string,
+): Promise<TopicDetail | null> {
+  const { data: topic, error: topicError } = await supabase
+    .from("topics")
+    .select("*, category:topic_categories(*)")
+    .eq("slug", topicSlug)
+    .eq("status", "published")
+    .single();
+
+  if (topicError || !topic) return null;
+
+  if ((topic.category as TopicCategory)?.slug !== categorySlug) return null;
+
+  const { data: contents } = await supabase
+    .from("topic_content")
+    .select("content_type, body")
+    .eq("topic_id", topic.id);
+
+  const { data: questions } = await supabase
+    .from("interview_questions")
+    .select("*")
+    .eq("topic_id", topic.id)
+    .order("difficulty");
+
+  const notes = contents?.find((c) => c.content_type === "notes")?.body ?? null;
+  const example = contents?.find((c) => c.content_type === "example")?.body ?? null;
+  const assessment = contents?.find((c) => c.content_type === "assessment")?.body ?? null;
+
+  let flashcards: Flashcard[] = [];
+  const flashcardsRaw = contents?.find((c) => c.content_type === "flashcards")?.body;
+  if (flashcardsRaw) {
+    try {
+      flashcards = JSON.parse(flashcardsRaw) as Flashcard[];
+    } catch {
+      flashcards = [];
+    }
+  }
+
+  return {
+    ...(topic as Topic),
+    notes,
+    example,
+    assessment,
+    flashcards,
+    questions: (questions || []) as InterviewQuestion[],
+  };
+}
+
+export async function incrementTopicViews(topicId: string): Promise<void> {
+  try {
+    const { error } = await supabase.rpc("increment_topic_views", {
+      topic_id: topicId,
+    });
+    // Silently ignore — RPC may not exist yet
+  } catch {
+    // Silent fail — view tracking is non-critical
+  }
+}
+
+export async function getRelatedTopics(
+  categorySlug: string,
+  topicSlug: string,
+  limit: number = 3,
+): Promise<Topic[]> {
+  const { data: category } = await supabase
+    .from("topic_categories")
+    .select("id")
+    .eq("slug", categorySlug)
+    .single();
+
+  if (!category) return [];
+
+  const { data, error } = await supabase
+    .from("topics")
+    .select("*, category:topic_categories(*)")
+    .eq("category_id", category.id)
+    .eq("status", "published")
+    .neq("slug", topicSlug)
+    .order("sort_order")
+    .limit(limit);
+
+  if (error) return [];
+  return (data || []) as Topic[];
 }

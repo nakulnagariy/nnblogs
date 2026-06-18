@@ -37,6 +37,14 @@ export const GitHubProfile = dynamic(
   }
 );
 
+export const FlashcardDeck = dynamic(
+  () => import('../learn/FlashcardDeck'),
+  {
+    loading: () => <Skeleton className="h-64 w-full rounded-xl" />,
+    ssr: false,
+  }
+);
+
 export const DataVizCharts = dynamic(
   () => import('../data-viz/StatsVisualization').then(mod => mod.StatsVisualization),
   {

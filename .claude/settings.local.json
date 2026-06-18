@@ -11,7 +11,9 @@
       "Bash(npx tsx *)",
       "Bash(python3 -c \"import sys,json; [print\\(json.dumps\\({'taskId': json.loads\\(l\\)['task_id'], 'cost': json.loads\\(l\\)['estimated_cost_usd']}\\)\\) for l in sys.stdin]\")",
       "Bash(findstr \"task_id\")",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Bash(mkdir -p \"C:\\\\personal projects\\\\nnblogs\\\\src\\\\app\\\\api\\\\learn\\\\[category]\")",
+      "Bash(mkdir -p \"C:\\\\personal projects\\\\nnblogs\\\\src\\\\app\\\\api\\\\learn\\\\[category]\\\\[topic]\")"
     ]
   }
 }

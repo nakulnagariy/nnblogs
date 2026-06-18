@@ -91,26 +91,30 @@ Deeper domain context, styling frameworks, testing philosophies, and structured 
 
 > UPDATE THIS AFTER EACH SESSION
 > Phase: Implementation
-> Current Epic: Epic 4 — Content Migration Pipeline
-> Current US: US-4.2 — Batch content generation across all categories
+> Current Epic: Epic 5 — Interview Prep UI
+> Current US: 🚦 Human Gate — US-5.0 through US-5.4 complete, awaiting review
 >
 > Last completed:
-> - Phase 2: Schema applied to Supabase (13 tables, RLS, ENUMs, 13 category seed rows). ADR-001 confirmed: Supabase as single CMS.
-> - Phase 3: Migration pipeline built — scripts/migration/{types,cost-tracker,analyzer,generator,loader,orchestrator}.ts. All TypeScript errors resolved.
-> - Phase 4 (partial): js-core category fully processed — 18 topics, 4 content types + 4 interview questions each. Quality gate passed by user. Total cost: ~$0.09 for 3 topics at $0.03/topic with claude-haiku-4-5-20251001.
+> - US-5.0: SQL migration created — supabase/migrations/20260619000000_promote_topics_to_published.sql
+>   ⚠ Still needs to be applied via Supabase SQL editor (run: UPDATE topics SET status = 'published' WHERE status = 'draft')
+> - US-5.1: TypeScript types (TopicCategory, Topic, TopicDetail, etc.), 5 Supabase query functions,
+>   3 API routes (/api/learn/categories, /api/learn/[category], /api/learn/[category]/[topic]),
+>   and useLearn.ts React Query hooks — all complete
+> - US-5.2: All learn UI components built:
+>   DifficultyBadge, TopicCard, TopicCardSkeleton, CategoryCard, TopicDetailTabs,
+>   FlashcardDeck, PremiumGate, TopicDetailWrapper, LearnClient, CategoryClient
+> - US-5.3: App Router pages created:
+>   /learn (category grid), /learn/[category] (topic list), /learn/[category]/[topic] (detail with tabs)
+> - US-5.4: Header.tsx and MobileMenu.tsx updated with /learn nav link
+> - Search extended to include topics (SearchBar + queries.ts updated)
+> - TypeScript: 0 errors | Lint: 0 new errors (pre-existing warnings only)
 >
-> Checkpoint state: docs/reports/checkpoint.json (js-core: 3 topics completed, quality gate approved)
-> Cost log: docs/reports/cost-log.jsonl
+> 🚦 GATE REQUIRED: Run the SQL migration in Supabase dashboard, then:
+>   npm run dev → visit /learn → verify category grid loads
+>   Click a category → verify topic list with difficulty filter
+>   Click a topic → verify tabbed content (Notes/Examples/Assessment/Flashcards/Q&A)
 >
-> Remaining categories (13 total, 1 done):
->   arrays-objects | async-js | css-html | performance-tooling | practical-js
->   react-angular | react-fundamentals | react-hooks | react-patterns-architecture
->   shared | system-design | testing | typescript
+> Next action (after gate approval): US-5.5 — Search + Sitemap | US-5.6 — Premium scaffolding stubs
 >
-> Next action: Run orchestrator for each remaining category (or all at once):
->   npx tsx scripts/migration/orchestrator.ts --categories arrays-objects,async-js,css-html,performance-tooling,practical-js,react-angular,react-fundamentals,react-hooks,react-patterns-architecture,shared,system-design,testing,typescript --approve-gate
->
-> Key commands:
->   Dry run:  npx tsx scripts/migration/orchestrator.ts --categories <cat> --dry-run
->   Resume:   npx tsx scripts/migration/orchestrator.ts --categories <cat> --resume --approve-gate
->   Full run: npx tsx scripts/migration/orchestrator.ts --categories <all> --approve-gate
+> Key migration commands (Epic 4 — still pending for remaining categories):
+>   Full run: npx tsx scripts/migration/orchestrator.ts --categories arrays-objects,async-js,css-html,performance-tooling,practical-js,react-angular,react-fundamentals,react-hooks,react-patterns-architecture,shared,system-design,testing,typescript --approve-gate
