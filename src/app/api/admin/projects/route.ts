@@ -1,20 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
+import { createSessionClient } from '@/lib/supabase/server';
 import { createProject, getAllProjects, updateProject, deleteProject } from '@/lib/supabase/admin-queries';
-
-async function checkUserRole() {
-  const { userId, sessionClaims } = await auth();
-  const role = (sessionClaims as any)?.role as string;
-  const authorized = !!userId && (role === 'ADMIN' || role === 'EDITOR');
-  return { authorized, userId };
-}
 
 export async function GET() {
   try {
-    const { authorized } = await checkUserRole();
-    if (!authorized) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
+    const supabase = await createSessionClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const projects = await getAllProjects();
     return NextResponse.json({ data: projects });
@@ -26,10 +18,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const { authorized } = await checkUserRole();
-    if (!authorized) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
+    const supabase = await createSessionClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const body = await request.json();
 
@@ -53,10 +44,9 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { authorized } = await checkUserRole();
-    if (!authorized) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
+    const supabase = await createSessionClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const body = await request.json();
     const { id, ...updates } = body;
@@ -75,10 +65,9 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const { authorized } = await checkUserRole();
-    if (!authorized) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
+    const supabase = await createSessionClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');

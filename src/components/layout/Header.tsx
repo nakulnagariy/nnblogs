@@ -3,14 +3,17 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, Search, Github } from 'lucide-react';
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { Menu, Search, Github, LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/components/providers/SupabaseProvider';
+import { createClient } from '@/lib/supabase/client';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { MobileMenu } from '@/components/layout/MobileMenu';
 import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Blog', href: '/blog' },
+  { name: 'Learn', href: '/learn' },
   { name: 'Videos', href: '/videos' },
   { name: 'Projects', href: '/projects' },
   { name: 'About', href: '/about' },
@@ -37,6 +40,15 @@ function NNLogo() {
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { user } = useUser();
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push('/');
+    router.refresh();
+  };
 
   return (
     <header className="sticky top-3 z-40 w-full">
@@ -98,19 +110,22 @@ export function Header() {
               <ThemeToggle />
             </div>
 
-            <SignedIn>
-              <div className="pl-1" aria-label="User account">
-                <UserButton afterSignOutUrl="/" />
-              </div>
-            </SignedIn>
-            <SignedOut>
+            {user ? (
+              <button
+                onClick={handleSignOut}
+                className="ml-1 p-2 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
+                aria-label="Sign out"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            ) : (
               <Link
                 href="/sign-in"
                 className="ml-1 text-xs font-medium px-3 py-1.5 rounded-full border border-border/60 text-muted-foreground hover:text-foreground hover:border-border transition-colors"
               >
                 Sign In
               </Link>
-            </SignedOut>
+            )}
 
             {/* Mobile hamburger */}
             <button

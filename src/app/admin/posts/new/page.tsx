@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MarkdownEditor, ImageUpload, AIAssistantPanel } from '@/components/blog';
+import { MarkdownEditor, ImageUpload } from '@/components/blog';
 import { generateSlug, calculateReadTime, extractExcerpt } from '@/lib/markdown';
 
 interface FormData {
@@ -302,35 +302,6 @@ export default function NewPostPage() {
               />
             </div>
 
-            {/* AI Writing Assistant */}
-            <AIAssistantPanel
-              content={formData.content}
-              title={formData.title}
-              onApplyContent={(content) => {
-                setFormData((prev) => ({ ...prev, content }));
-                setIsDirty(true);
-              }}
-              onAppendContent={(text) => {
-                setFormData((prev) => ({ ...prev, content: prev.content + text }));
-                setIsDirty(true);
-              }}
-              onSetTags={(tags) => {
-                setFormData((prev) => ({ ...prev, tags }));
-                setIsDirty(true);
-              }}
-              onSetExcerpt={(excerpt) => {
-                setFormData((prev) => ({ ...prev, metaDescription: excerpt }));
-                setIsDirty(true);
-              }}
-              onSetTitle={(newTitle) => {
-                setFormData((prev) => ({
-                  ...prev,
-                  title: newTitle,
-                  slug: prev.slug || generateSlug(newTitle),
-                }));
-                setIsDirty(true);
-              }}
-            />
           </div>
 
           {/* Right Column - Metadata */}

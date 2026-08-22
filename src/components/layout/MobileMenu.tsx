@@ -3,8 +3,10 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { X } from 'lucide-react';
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { X, LogOut } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/components/providers/SupabaseProvider';
+import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 
@@ -16,6 +18,7 @@ interface MobileMenuProps {
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Blog', href: '/blog' },
+  { name: 'Learn', href: '/learn' },
   { name: 'Videos', href: '/videos' },
   { name: 'Projects', href: '/projects' },
   { name: 'About', href: '/about' },
@@ -23,6 +26,16 @@ const navigation = [
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user } = useUser();
+
+  const handleSignOut = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    onClose();
+    router.push('/');
+    router.refresh();
+  };
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -107,26 +120,21 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
         {/* Footer Actions */}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border/40 bg-background shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.5)]">
-          <SignedIn>
-            <div className="flex items-center gap-3 py-1">
-              <UserButton afterSignOutUrl="/" />
-              <span className="text-sm font-medium text-muted-foreground">Account</span>
-            </div>
-          </SignedIn>
-          <SignedOut>
-            <div className="flex flex-col gap-2">
-              <Link href="/sign-in" onClick={onClose}>
-                <Button className="w-full bg-foreground text-background hover:bg-foreground/90 font-medium" size="lg">
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/sign-up" onClick={onClose}>
-                <Button variant="outline" className="w-full border-border/60 bg-background text-foreground hover:bg-muted/60 font-medium" size="lg">
-                  Sign Up
-                </Button>
-              </Link>
-            </div>
-          </SignedOut>
+          {user ? (
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-2 w-full px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/60 transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign out
+            </button>
+          ) : (
+            <Link href="/sign-in" onClick={onClose}>
+              <Button className="w-full bg-foreground text-background hover:bg-foreground/90 font-medium" size="lg">
+                Sign In
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </>

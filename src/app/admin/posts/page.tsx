@@ -334,7 +334,7 @@ export default function AdminPostsPage() {
         <div className="mb-6 rounded-2xl border border-destructive/30 bg-destructive/5 p-4 text-destructive">
           <p className="font-semibold text-sm">Error</p>
           <p className="text-xs mt-0.5 opacity-80">{error}</p>
-          <p className="text-xs mt-1 opacity-60">Make sure you have ADMIN or EDITOR role in Clerk Unsafe Metadata</p>
+          <p className="text-xs mt-1 opacity-60">Make sure you are signed in with an authorized account</p>
         </div>
       )}
 

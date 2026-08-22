@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { Inter } from 'next/font/google';
-import { ClerkProvider } from '@clerk/nextjs';
 import { QueryProvider } from '@/components/providers/QueryProvider';
+import { SupabaseProvider } from '@/components/providers/SupabaseProvider';
+import { createSessionClient } from '@/lib/supabase/server';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { GoogleAnalytics } from '@/components/analytics';
 import { Header } from '@/components/layout/Header';
@@ -16,12 +17,18 @@ const inter = Inter({
   display: 'swap',
 });
 
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'NNBlogs';
+const siteDescription =
+  process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
+  'Personal blog, projects, and interview-prep notes by Nakul Nagariya';
+const siteTitle = `${siteName} - Personal Blog & Portfolio`;
+
 export const metadata: Metadata = {
   title: {
-    default: 'NNBlogs - Personal Blog & Portfolio',
-    template: '%s | NNBlogs',
+    default: siteTitle,
+    template: `%s | ${siteName}`,
   },
-  description: 'A personal blog showcasing articles, videos, and projects. Built with Next.js, TypeScript, and modern web technologies.',
+  description: siteDescription,
   keywords: ['blog', 'portfolio', 'web development', 'programming', 'technology'],
   authors: [{ name: 'Nakul Nagariya' }],
   creator: 'Nakul Nagariya',
@@ -29,14 +36,14 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_SITE_URL,
-    siteName: 'NNBlogs',
-    title: 'NNBlogs - Personal Blog & Portfolio',
-    description: 'A personal blog showcasing articles, videos, and projects.',
+    siteName,
+    title: siteTitle,
+    description: siteDescription,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'NNBlogs - Personal Blog & Portfolio',
-    description: 'A personal blog showcasing articles, videos, and projects.',
+    title: siteTitle,
+    description: siteDescription,
   },
   robots: {
     index: true,
@@ -49,13 +56,16 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const supabase = await createSessionClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
   return (
-    <ClerkProvider>
+    <SupabaseProvider initialUser={user}>
       <html lang="en" suppressHydrationWarning>
         <body className={`${inter.variable} font-sans antialiased`}>
           <ThemeProvider
@@ -78,6 +88,6 @@ export default function RootLayout({
           </ThemeProvider>
         </body>
       </html>
-    </ClerkProvider>
+    </SupabaseProvider>
   );
 }

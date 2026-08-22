@@ -1,16 +1,15 @@
 # NNBlogs - Personal Blog & Portfolio
 
-A modern, full-featured personal blog website built with Next.js 14, TypeScript, Tailwind CSS, Supabase, and Clerk authentication.
-
-![NNBlogs](https://via.placeholder.com/1200x630?text=NNBlogs+-+Personal+Blog)
+A modern, full-featured personal blog website built with Next.js 16, TypeScript, Tailwind CSS, and Supabase (database + authentication). Also includes an additive "/learn" interview-prep platform.
 
 ## ✨ Features
 
 - **📝 Blog Posts** - Write and publish articles with Markdown support and syntax highlighting
 - **🎥 Videos** - Showcase video tutorials and content
 - **💼 Projects** - Display your portfolio and GitHub repositories
-- **🔍 Search** - Full-text search across all content
-- **🔐 Authentication** - Secure login with Clerk
+- **📚 Learn** - Interview-prep topics with notes, examples, assessments, and flashcards
+- **🔍 Search** - Full-text search across posts and learn topics
+- **🔐 Authentication** - Secure login with Supabase Auth
 - **📊 Analytics** - Google Analytics integration
 - **🤖 AI Integration** - Generate content with OpenAI
 - **🐙 GitHub Integration** - Display your GitHub profile and repositories
@@ -19,11 +18,11 @@ A modern, full-featured personal blog website built with Next.js 14, TypeScript,
 
 ## 🚀 Tech Stack
 
-- **Framework**: [Next.js 14](https://nextjs.org/) with App Router
+- **Framework**: [Next.js 16](https://nextjs.org/) with App Router
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Database**: [Supabase](https://supabase.com/) (PostgreSQL)
-- **Authentication**: [Clerk](https://clerk.com/)
+- **Authentication**: [Supabase Auth](https://supabase.com/auth)
 - **State Management**: [TanStack Query](https://tanstack.com/query) (React Query)
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Markdown**: [Marked](https://marked.js.org/) + [Highlight.js](https://highlightjs.org/)
@@ -35,14 +34,13 @@ A modern, full-featured personal blog website built with Next.js 14, TypeScript,
 - Node.js 20.x or later
 - npm or yarn
 - Supabase account
-- Clerk account
 
 ### Installation
 
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/nnblogs.git
+   git clone https://github.com/nakulnagariy/nnblogs.git
    cd nnblogs
    ```
 
@@ -66,9 +64,8 @@ A modern, full-featured personal blog website built with Next.js 14, TypeScript,
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
-   # Clerk
-   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-   CLERK_SECRET_KEY=your_clerk_secret_key
+   # Admin access (comma-separated Supabase Auth emails)
+   ADMIN_EMAILS=you@example.com
 
    # GitHub
    GITHUB_USERNAME=your_github_username
@@ -113,10 +110,9 @@ This creates:
 
 ## 🔐 Authentication Setup
 
-1. Create a [Clerk](https://clerk.com/) account
-2. Create a new application
-3. Copy the API keys to your `.env.local`
-4. Configure sign-in/sign-up URLs in Clerk dashboard
+1. Enable email/password auth in your Supabase project (Authentication → Providers)
+2. Create the admin account(s) you'll sign in with (Authentication → Users)
+3. Add those emails to `ADMIN_EMAILS` in `.env.local` — only listed emails can access `/admin` and `/api/admin/*`
 
 ## 📊 Google Analytics Setup
 
@@ -147,11 +143,9 @@ To enable:
 
 ## 🚀 Deployment
 
-### AWS Amplify (Recommended)
+### Vercel (Recommended)
 
-See [AWS Deployment Guide](./docs/AWS_DEPLOYMENT.md) for detailed instructions.
-
-### Vercel (Easiest)
+Import the repo at [vercel.com/new](https://vercel.com/new), set the environment variables from `.env.local.example` in the project settings, and deploy. Vercel auto-builds on every push to `main`.
 
 ```bash
 npm install -g vercel
@@ -165,22 +159,27 @@ docker build -t nnblogs .
 docker run -p 3000:3000 --env-file .env.local nnblogs
 ```
 
+### AWS Amplify
+
+See [AWS Deployment Guide](./docs/AWS_DEPLOYMENT.md) for detailed instructions.
+
 ## 📁 Project Structure
 
 ```
 src/
 ├── app/                    # Next.js App Router pages
-│   ├── api/               # API routes
+│   ├── api/               # API routes (incl. admin/* and learn/*)
 │   ├── blog/              # Blog pages
 │   ├── videos/            # Video pages
 │   ├── projects/          # Projects page
-│   ├── search/            # Search page
-│   ├── about/             # About page
-│   ├── sign-in/           # Clerk sign-in
-│   └── sign-up/           # Clerk sign-up
+│   ├── learn/              # Interview-prep platform
+│   ├── search/             # Search page
+│   ├── about/              # About page
+│   └── sign-in/             # Supabase Auth sign-in
 ├── components/            # React components
 │   ├── ui/               # Reusable UI components
 │   ├── blog/             # Blog-specific components
+│   ├── learn/             # Learn-specific components
 │   ├── github/           # GitHub integration
 │   ├── layout/           # Layout components
 │   ├── search/           # Search components
@@ -194,7 +193,7 @@ src/
 │   ├── markdown.ts       # Markdown parsing
 │   └── utils.ts          # Helper functions
 ├── types/                 # TypeScript types
-└── middleware.ts          # Auth middleware
+└── middleware.ts          # Auth + admin-access middleware
 ```
 
 ## 🛠️ Available Scripts
@@ -321,9 +320,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Next.js](https://nextjs.org/) - The React Framework
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS
 - [Supabase](https://supabase.com/) - Open Source Firebase Alternative
-- [Clerk](https://clerk.com/) - Authentication Made Simple
 - [Vercel](https://vercel.com/) - Platform for Frontend Developers
 
 ---
 
-Built with ❤️ by [Your Name](https://github.com/yourusername)
+Built with ❤️ by [Nakul Nagariya](https://github.com/nakulnagariy)

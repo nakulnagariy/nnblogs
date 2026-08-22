@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, X, FileText, Video, FolderGit2 } from 'lucide-react';
+import { Search, X, FileText, Video, FolderGit2, BookOpen } from 'lucide-react';
 import { analytics } from '@/lib/analytics';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
@@ -21,12 +21,14 @@ const typeIcons = {
   post: FileText,
   video: Video,
   project: FolderGit2,
+  topic: BookOpen,
 };
 
 const typeColors = {
   post: 'text-foreground',
   video: 'text-red-500',
   project: 'text-muted-foreground',
+  topic: 'text-primary',
 };
 
 export function SearchBar({ className, autoFocus, onResultClick }: SearchBarProps) {
@@ -63,6 +65,7 @@ export function SearchBar({ className, autoFocus, onResultClick }: SearchBarProp
         post: `/blog/${result.slug}`,
         video: `/videos/${result.slug}`,
         project: `/projects#${result.slug}`,
+        topic: `/learn/${result.category ?? ""}/${result.slug}`,
       };
       router.push(paths[result.type]);
       setIsOpen(false);

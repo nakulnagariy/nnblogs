@@ -14,7 +14,7 @@ const skills = [
   },
   {
     category: 'AI & Automation',
-    items: ['OpenAI API', 'LangChain', 'Python', 'Vector DBs', 'Vercel AI SDK', 'Prompt Engineering'],
+    items: ['LangChain', 'Python', 'Vector DBs', 'Vercel AI SDK', 'Prompt Engineering'],
   },
   {
     category: 'DevOps',

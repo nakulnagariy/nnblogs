@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import * as Sentry from '@sentry/nextjs';
 import { AlertOctagon, RefreshCw } from 'lucide-react';
 
 interface GlobalErrorProps {
@@ -12,7 +11,7 @@ interface GlobalErrorProps {
 // Replaces the root layout on crash — must include <html> and <body>
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
   useEffect(() => {
-    Sentry.captureException(error);
+    console.error(error);
   }, [error]);
 
   return (

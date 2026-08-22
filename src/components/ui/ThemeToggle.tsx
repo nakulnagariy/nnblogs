@@ -13,6 +13,7 @@ export function ThemeToggle() {
   // next-themes populates `theme` synchronously on the client, so checking
   // `resolvedTheme` alone is not a reliable mount guard.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional hydration-mismatch guard, see comment above
     setMounted(true);
   }, []);
 
