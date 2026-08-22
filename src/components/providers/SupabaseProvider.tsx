@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 
@@ -11,7 +11,7 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue>({ user: null });
 
 interface SupabaseProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
   initialUser: User | null;
 }
 

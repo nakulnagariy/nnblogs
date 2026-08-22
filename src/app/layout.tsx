@@ -17,12 +17,18 @@ const inter = Inter({
   display: 'swap',
 });
 
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'NNBlogs';
+const siteDescription =
+  process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
+  'Personal blog, projects, and interview-prep notes by Nakul Nagariya';
+const siteTitle = `${siteName} - Personal Blog & Portfolio`;
+
 export const metadata: Metadata = {
   title: {
-    default: 'NNBlogs - Personal Blog & Portfolio',
-    template: '%s | NNBlogs',
+    default: siteTitle,
+    template: `%s | ${siteName}`,
   },
-  description: 'A personal blog showcasing articles, videos, and projects. Built with Next.js, TypeScript, and modern web technologies.',
+  description: siteDescription,
   keywords: ['blog', 'portfolio', 'web development', 'programming', 'technology'],
   authors: [{ name: 'Nakul Nagariya' }],
   creator: 'Nakul Nagariya',
@@ -30,14 +36,14 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: process.env.NEXT_PUBLIC_SITE_URL,
-    siteName: 'NNBlogs',
-    title: 'NNBlogs - Personal Blog & Portfolio',
-    description: 'A personal blog showcasing articles, videos, and projects.',
+    siteName,
+    title: siteTitle,
+    description: siteDescription,
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'NNBlogs - Personal Blog & Portfolio',
-    description: 'A personal blog showcasing articles, videos, and projects.',
+    title: siteTitle,
+    description: siteDescription,
   },
   robots: {
     index: true,

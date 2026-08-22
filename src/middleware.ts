@@ -1,10 +1,19 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
-const PROTECTED_PREFIXES = ['/admin'];
+const PROTECTED_PREFIXES = ['/admin', '/api/admin'];
+
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? '')
+  .split(',')
+  .map((email) => email.trim().toLowerCase())
+  .filter(Boolean);
 
 function isProtected(pathname: string) {
   return PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
+}
+
+function isAdmin(email: string | null | undefined) {
+  return !!email && ADMIN_EMAILS.includes(email.toLowerCase());
 }
 
 export async function middleware(request: NextRequest) {
@@ -30,8 +39,22 @@ export async function middleware(request: NextRequest) {
   // Refreshes the session cookie if expired — must be called before any redirect
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user && isProtected(request.nextUrl.pathname)) {
-    return NextResponse.redirect(new URL('/sign-in', request.url));
+  if (isProtected(request.nextUrl.pathname)) {
+    const isApiRoute = request.nextUrl.pathname.startsWith('/api/');
+
+    if (!user) {
+      if (isApiRoute) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      return NextResponse.redirect(new URL('/sign-in', request.url));
+    }
+
+    if (!isAdmin(user.email)) {
+      if (isApiRoute) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      }
+      return NextResponse.redirect(new URL('/', request.url));
+    }
   }
 
   return response;

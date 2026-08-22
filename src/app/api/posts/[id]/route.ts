@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/client";
 
 export async function GET(
   _request: NextRequest,
@@ -15,10 +15,15 @@ export async function GET(
       );
     }
 
-    const { data: post, error } = await supabaseAdmin
+    // Public route: use the RLS-bound anon client and only ever return
+    // published posts. Draft/unpublished content must go through the
+    // authenticated /api/admin/posts routes instead.
+    const supabase = createClient();
+    const { data: post, error } = await supabase
       .from("posts")
       .select("*")
       .eq("id", id)
+      .eq("published", true)
       .single();
 
     if (error) {

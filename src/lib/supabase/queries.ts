@@ -471,10 +471,8 @@ export async function getTopicBySlug(
 
 export async function incrementTopicViews(topicId: string): Promise<void> {
   try {
-    const { error } = await supabase.rpc("increment_topic_views", {
-      topic_id: topicId,
-    });
-    // Silently ignore — RPC may not exist yet
+    // Silently ignore errors — RPC may not exist yet, view tracking is non-critical
+    await supabase.rpc("increment_topic_views", { topic_id: topicId });
   } catch {
     // Silent fail — view tracking is non-critical
   }

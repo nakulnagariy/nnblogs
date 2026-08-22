@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
@@ -11,7 +11,7 @@ export default function SignInPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
     setLoading(true);

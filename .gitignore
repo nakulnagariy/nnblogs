@@ -33,6 +33,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env*.example
 
 # vercel
 .vercel
@@ -41,7 +42,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# clerk configuration (can include secrets)
+# generated reports
+lighthouse-report.json
+
+# legacy clerk config directory (auth migrated to Supabase; may still hold local secrets)
 /.clerk/
 
 # claude local overrides (user-specific)
