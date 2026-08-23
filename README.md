@@ -1,18 +1,18 @@
-# NNBlogs - Personal Blog & Portfolio
+# NNBlogs - Personal Blog
 
-A modern, full-featured personal blog website built with Next.js 16, TypeScript, Tailwind CSS, and Supabase (database + authentication). Also includes an additive "/learn" interview-prep platform.
+A git-native personal blog built with Next.js 16, TypeScript, and Tailwind CSS.
+Posts are Markdown files under `content/posts/`, authored through
+[Keystatic](https://keystatic.com/) (`/keystatic`, local dev only) and
+published by committing and pushing like any other change — no database, no
+authentication system. GitHub's own PR/merge permissions on this repo are
+the access control.
 
 ## ✨ Features
 
-- **📝 Blog Posts** - Write and publish articles with Markdown support and syntax highlighting
-- **🎥 Videos** - Showcase video tutorials and content
-- **💼 Projects** - Display your portfolio and GitHub repositories
-- **📚 Learn** - Interview-prep topics with notes, examples, assessments, and flashcards
-- **🔍 Search** - Full-text search across posts and learn topics
-- **🔐 Authentication** - Secure login with Supabase Auth
+- **📝 Blog Posts** - Markdown posts with syntax highlighting, stored in git
+- **🔍 Search** - Full-text search across posts
+- **🐙 GitHub Integration** - Pinned-repos widget on the About page
 - **📊 Analytics** - Google Analytics integration
-- **🤖 AI Integration** - Generate content with OpenAI
-- **🐙 GitHub Integration** - Display your GitHub profile and repositories
 - **📱 Responsive** - Mobile-first design
 - **🌙 Dark Mode** - Automatic dark mode support
 
@@ -20,10 +20,9 @@ A modern, full-featured personal blog website built with Next.js 16, TypeScript,
 
 - **Framework**: [Next.js 16](https://nextjs.org/) with App Router
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Database**: [Supabase](https://supabase.com/) (PostgreSQL)
-- **Authentication**: [Supabase Auth](https://supabase.com/auth)
-- **State Management**: [TanStack Query](https://tanstack.com/query) (React Query)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [nn-design](https://www.npmjs.com/package/nn-design) tokens
+- **Content**: Markdown files in git, authored via [Keystatic](https://keystatic.com/)
+- **State Management**: [TanStack Query](https://tanstack.com/query) (React Query, used for live search only)
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Markdown**: [Marked](https://marked.js.org/) + [Highlight.js](https://highlightjs.org/)
 
@@ -33,7 +32,6 @@ A modern, full-featured personal blog website built with Next.js 16, TypeScript,
 
 - Node.js 20.x or later
 - npm or yarn
-- Supabase account
 
 ### Installation
 
@@ -56,90 +54,39 @@ A modern, full-featured personal blog website built with Next.js 16, TypeScript,
    cp .env.local.example .env.local
    ```
 
-   Fill in your environment variables:
+   Fill in your environment variables (GitHub token, Google Analytics ID,
+   site URL/name — see `.env.local.example` for the full list). None of
+   these are required for `npm run dev` to work; the site degrades
+   gracefully without them.
 
-   ```env
-   # Supabase
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-
-   # Admin access (comma-separated Supabase Auth emails)
-   ADMIN_EMAILS=you@example.com
-
-   # GitHub
-   GITHUB_USERNAME=your_github_username
-   GITHUB_TOKEN=your_github_token
-
-   # Google Analytics
-   NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-
-   # OpenAI (optional)
-   OPENAI_API_KEY=your_openai_key
-   ```
-
-4. **Set up the database**
-   - Go to your Supabase project
-   - Navigate to SQL Editor
-   - Run the schema from `supabase/schema.sql`
-
-5. **Run the development server**
+4. **Run the development server**
 
    ```bash
    npm run dev
    ```
 
-6. **Open [http://localhost:3000](http://localhost:3000)**
+5. **Open [http://localhost:3000](http://localhost:3000)**
 
-## 🗄️ Database Setup
+## ✍️ Writing a Post
 
-Run the SQL schema in your Supabase SQL Editor:
+1. Run `npm run dev` and open [http://localhost:3000/keystatic](http://localhost:3000/keystatic)
+2. Create or edit a post through the admin UI — it writes directly to
+   `content/posts/<slug>/index.yaml` in your working tree
+3. Commit and push; publishing is just merging to `main`
 
-```sql
--- See supabase/schema.sql for full schema
-```
+To hide a post without deleting it, toggle its `Draft` field.
 
-This creates:
+## 🐙 GitHub Integration
 
-- `posts` - Blog posts with markdown content
-- `videos` - Video content
-- `projects` - Portfolio projects
-- `categories` - Content categories
-- Row Level Security policies
-- Indexes for performance
-
-## 🔐 Authentication Setup
-
-1. Enable email/password auth in your Supabase project (Authentication → Providers)
-2. Create the admin account(s) you'll sign in with (Authentication → Users)
-3. Add those emails to `ADMIN_EMAILS` in `.env.local` — only listed emails can access `/admin` and `/api/admin/*`
+1. Create a [Personal Access Token](https://github.com/settings/tokens)
+2. Add `GITHUB_USERNAME` and `GITHUB_TOKEN` to your env
+3. Your pinned repos will be displayed on the About page
 
 ## 📊 Google Analytics Setup
 
 1. Create a [Google Analytics](https://analytics.google.com/) property
 2. Get your Measurement ID (G-XXXXXXXXXX)
 3. Add it to `NEXT_PUBLIC_GA_MEASUREMENT_ID`
-
-## 🐙 GitHub Integration
-
-1. Create a [Personal Access Token](https://github.com/settings/tokens)
-2. Add `GITHUB_USERNAME` and `GITHUB_TOKEN` to your env
-3. Your profile and repos will be displayed on the Projects page
-
-## 🤖 AI Content Generation
-
-The blog includes optional AI-powered features:
-
-- Generate blog post drafts
-- Auto-generate excerpts
-- Suggest tags for content
-- Improve writing quality
-
-To enable:
-
-1. Get an [OpenAI API key](https://platform.openai.com/)
-2. Add it to `OPENAI_API_KEY`
-3. Use the `/api/ai` endpoint
 
 ## 🚀 Deployment
 
@@ -166,40 +113,38 @@ See [AWS Deployment Guide](./docs/AWS_DEPLOYMENT.md) for detailed instructions.
 ## 📁 Project Structure
 
 ```
+content/
+└── posts/                 # Blog posts (Keystatic-managed YAML, one dir per slug)
+keystatic.config.ts        # Keystatic collection schema
+
 src/
 ├── app/                    # Next.js App Router pages
-│   ├── api/               # API routes (incl. admin/* and learn/*)
-│   ├── blog/              # Blog pages
-│   ├── videos/            # Video pages
-│   ├── projects/          # Projects page
-│   ├── learn/              # Interview-prep platform
-│   ├── search/             # Search page
-│   ├── about/              # About page
-│   └── sign-in/             # Supabase Auth sign-in
-├── components/            # React components
-│   ├── ui/               # Reusable UI components
-│   ├── blog/             # Blog-specific components
-│   ├── learn/             # Learn-specific components
-│   ├── github/           # GitHub integration
-│   ├── layout/           # Layout components
-│   ├── search/           # Search components
-│   ├── analytics/        # Analytics components
-│   └── providers/        # React providers
-├── hooks/                 # Custom React hooks
-├── lib/                   # Utility libraries
-│   ├── supabase/         # Database client & queries
-│   ├── github.ts         # GitHub API
-│   ├── ai.ts             # AI integration
-│   ├── markdown.ts       # Markdown parsing
-│   └── utils.ts          # Helper functions
-├── types/                 # TypeScript types
-└── middleware.ts          # Auth + admin-access middleware
+│   ├── api/                # API routes (search, keystatic)
+│   ├── blog/                # Blog listing + post pages
+│   ├── keystatic/            # Keystatic admin UI mount (dev-only in practice)
+│   ├── search/               # Search page
+│   └── about/                 # About page
+├── components/              # React components
+│   ├── ui/                   # Reusable UI components
+│   ├── blog/                 # Blog-specific components
+│   ├── github/                # GitHub repos widget
+│   ├── layout/                # Layout components
+│   ├── search/                 # Search components
+│   ├── analytics/               # Analytics components
+│   └── providers/                # React providers
+├── hooks/                    # Custom React hooks
+├── lib/                       # Utility libraries
+│   ├── content/                # File-based content queries (Keystatic reader)
+│   ├── github.ts                 # GitHub API
+│   ├── markdown.ts                # Markdown parsing
+│   └── utils.ts                    # Helper functions
+└── types/                     # TypeScript types
 ```
 
 ## 🛠️ Available Scripts
 
 ```bash
-npm run dev           # Start development server
+npm run dev           # Start development server (also serves /keystatic)
 npm run build         # Build for production
 npm run start         # Start production server
 npm run lint          # Run ESLint
@@ -319,7 +264,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [Next.js](https://nextjs.org/) - The React Framework
 - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS
-- [Supabase](https://supabase.com/) - Open Source Firebase Alternative
+- [Keystatic](https://keystatic.com/) - Git-backed content management
 - [Vercel](https://vercel.com/) - Platform for Frontend Developers
 
 ---
