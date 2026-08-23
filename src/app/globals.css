@@ -26,6 +26,26 @@
    markup keeps working unchanged.
    ------------------------------------------------------------------------- */
 @theme inline {
+  /* nn-design's spacing scale reuses Tailwind's own T-shirt-size names
+     (xs, sm, md, lg, xl, 2xl, 3xl), the same names Tailwind's built-in
+     container scale uses for max-width sizing. Tailwind resolves sizing
+     utilities against the spacing scale first when both exist, so e.g.
+     "max-w-3xl" silently became nn-design's 4rem spacing value instead
+     of the intended 48rem container width. Removing the colliding keys
+     here restores Tailwind's normal container-based sizing; the raw
+     nn-design spacing variables are still available directly, and this
+     app's padding, gap, and margin utilities all use Tailwind's numeric
+     scale, which doesn't collide. */
+  --spacing-3xs: initial;
+  --spacing-2xs: initial;
+  --spacing-xs: initial;
+  --spacing-sm: initial;
+  --spacing-md: initial;
+  --spacing-lg: initial;
+  --spacing-xl: initial;
+  --spacing-2xl: initial;
+  --spacing-3xl: initial;
+
   --color-background: var(--nn-color-surface-1);
   --color-foreground: var(--nn-color-text);
   --color-card: var(--nn-color-surface-1);
@@ -134,7 +154,11 @@ select:focus:not(:focus-visible) {
 
 /* Selection */
 ::selection {
-  background-color: color-mix(in srgb, var(--nn-color-primary) 20%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--nn-color-primary) 20%,
+    transparent
+  );
 }
 
 /* Smooth Scroll */
