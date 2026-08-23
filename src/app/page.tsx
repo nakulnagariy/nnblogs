@@ -1,5 +1,5 @@
 import { HeroSection, FeaturedWorkSection } from '@/components/home';
-import { getFeaturedPosts } from '@/lib/supabase/queries';
+import { getFeaturedPosts } from '@/lib/content/posts';
 
 export default async function HomePage() {
   const featuredPosts = await getFeaturedPosts(3);

@@ -1,0 +1,184 @@
+title: "Mastering Frontend System Design: Building Resilient Offline Support"
+excerpt: "In modern web development, we often assume the network is always there. But in reality, network problems happen constantly: Wi-Fi drops, mobile signals switch,..."
+featuredImage: "mastering-frontend-system-design-building-resilient-offline-support.png"
+category: "Technology"
+tags: []
+createdAt: 2026-03-08
+featured: false
+draft: false
+content: |
+  **In modern web development, we often assume the network is always there. But in reality, network problems happen constantly: Wi-Fi drops, mobile signals switch, or a laptop wakes from sleep mode**
+
+  - When these interruptions occur during a page refresh, many applications fail completely, leaving users with a blank screen or the dreaded "browser dinosaur" page
+
+  - Offline support isn't just a fancy feature; it is a reliability problem and a fundamental aspect of frontend system design
+
+  #### The Goal: Designing in Layers
+
+  Offline support doesn't mean your app must have full functionality without the internet immediately. Instead, it should be built in layers:
+
+  1. Layer 1: The UI Shell. The most critical layer. The application must still start when the user is offline, showing a working UI shell instead of a blank screen
+  3. Layer 2: Read-Only Data. Showing cached data for read operations so the user can still see information
+  5. Layer 3: Write Operations. Using queues to store local changes and syncing them when the connection returns (an advanced topic involving conflict resolution)
+
+  #### The Core Browser Tools
+
+  To implement these layers, the browser provides two essential tools:
+
+  - Service Workers: Scripts that run in the background, outside your page. They can intercept network requests and decide how to respond to them
+  - Cache API: A system for storing request and response pairs (HTML, JS, CSS, and API data)
+  - Together, these allow you to override default browser behavior—instead of failing when the network is gone, you can serve content from the cache
+
+  #### 3. Implementation:
+
+  Detecting Connection Status
+  Before diving into Service Workers, you can use basic browser properties to update your UI based on connectivity
+
+  ```ts
+  // Checking initial status
+  const isOnline = navigator.onLine; 
+  console.log(isOnline ? "Online" : "Offline");
+
+  // Listening for changes
+  window.addEventListener('online', () => {
+      updateUIStatus(true);
+  });
+
+  window.addEventListener('offline', () => {
+      updateUIStatus(false);
+  });
+
+  function updateUIStatus(online) {
+      const statusLabel = document.getElementById('status');
+      statusLabel.textContent = online ? 'Online' : 'Offline';
+      // You can also toggle CSS classes here
+      document.body.className = online ? 'status-online' : 'status-offline';
+  }
+  ```
+
+  #### Source:
+  **Registering a Service Worker**
+  A Service Worker must be registered in your main JavaScript file. You should first check if the browser supports it
+
+  ```ts
+  if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+              .then(registration => {
+                  console.log('Service Worker registered with scope:', registration.scope);
+              })
+              .catch(error => {
+                  console.error('Service Worker registration failed:', error);
+              });
+      });
+  }
+  ```
+
+  #### Source:
+
+  The Service Worker Lifecycle (sw.js)
+  Inside your sw.js file, you handle three primary events: install, activate, and fetch
+
+  A. The Install Event: Caching the App Shell
+  During installation, we cache the static assets (HTML, CSS, JS) that make up the "UI Shell"
+
+  ```ts
+  const CACHE_NAME = 'app-shell-v1';
+  const ASSETS_TO_CACHE = [
+      '/',
+      '/index.html',
+      '/styles.css',
+      '/app.js',
+      '/offline.html' // A fallback page
+  ];
+
+  self.addEventListener('install', (event) => {
+      event.waitUntil(
+          caches.open(CACHE_NAME).then((cache) => {
+              return cache.addAll(ASSETS_TO_CACHE);
+          })
+      );
+  });
+  ```
+
+  #### Source:
+
+  B. The Fetch Event: Interception Strategies
+  This is where the magic happens. You can define different strategies for different types of requests
+
+  Strategy 1: Network First (For Navigation & APIs)
+  Try to get the fresh version from the network. If that fails, fall back to the cache
+
+  ```ts
+  async function networkFirst(request) {
+      const cache = await caches.open(CACHE_NAME);
+      try {
+          const response = await fetch(request);
+          // Save fresh copy to cache
+          cache.put(request, response.clone());
+          return response;
+      } catch (error) {
+          // Fallback to cache if network fails
+          const cachedResponse = await cache.match(request);
+          return cachedResponse || cache.match('/offline.html');
+      }
+  }
+  ```
+
+  Source:
+  Strategy 2: Cache First (For Static Assets)
+  Check the cache first. If it's there, return it immediately to save time and bandwidth. Otherwise, fetch it
+
+  ```ts
+  async function cacheFirst(request) {
+      const cachedResponse = await caches.match(request);
+      if (cachedResponse) {
+          return cachedResponse;
+      }
+      const response = await fetch(request);
+      const cache = await caches.open(CACHE_NAME);
+      cache.put(request, response.clone());
+      return response;
+  }
+  ```
+
+  #### Source:
+
+  C. Putting it all together in the Fetch Listener
+
+  ```ts
+  self.addEventListener('fetch', (event) => {
+      const url = new URL(event.request.url);
+
+      // 1. Handle Navigation Requests (HTML)
+      if (event.request.mode === 'navigate') {
+          event.respondWith(networkFirst(event.request));
+      } 
+      // 2. Handle Static Assets (JS, CSS, Images)
+      else if (event.request.destination === 'script' || event.request.destination === 'style') {
+          event.respondWith(cacheFirst(event.request));
+      }
+      // 3. Handle API Requests (Read-only)
+      else if (url.pathname.startsWith('/api/')) {
+          event.respondWith(networkFirst(event.request));
+      }
+  });
+  ```
+
+  Source:
+
+  6. Advanced Considerations: Beyond Read-Only
+  While this approach handles read-only data and the application shell, write operations (like creating or editing content) are more complex
+
+  **These typically require:**
+
+  -  A Local Queue: Storing user actions in IndexedDB while offline
+  - Background Sync: Sending those queued actions when the connection is restored
+  - Conflict Resolution: Handling cases where data on the server changed while the user was offline
+
+  **Summary**
+
+  Offline support starts with the simple requirement that the application must load and render even when the network is unavailable
+
+  - By using Service Workers to intercept requests and the Cache API to store the UI shell, you transform your app from a fragile web page into a resilient system that provides a seamless user experience, regardless of connectivity
+

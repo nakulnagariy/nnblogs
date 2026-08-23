@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Calendar, Clock, Tag, TrendingUp } from 'lucide-react';
+import { Calendar, Clock, Tag } from 'lucide-react';
 import Link from 'next/link';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -111,12 +111,6 @@ export function BlogTimeline({ posts, title = "Journey Through Knowledge", descr
                             <Tag className="w-3 h-3 mr-1" />
                             {post.category}
                           </Badge>
-                          {post.views && post.views > 0 && (
-                            <div className="flex items-center text-sm text-muted-foreground">
-                              <TrendingUp className="w-4 h-4 mr-1" />
-                              {post.views.toLocaleString()} views
-                            </div>
-                          )}
                         </div>
 
                         {/* Title */}

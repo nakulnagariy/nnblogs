@@ -1,51 +1,19 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import {
-  getPosts,
-  getPostBySlug,
-  getFeaturedPosts,
-  getRecentPosts,
-  searchContent,
-} from "@/lib/supabase/queries";
+import type { SearchResult } from "@/types";
 
-export function usePosts(
-  page: number = 1,
-  pageSize: number = 10,
-  category?: string,
-) {
-  return useQuery({
-    queryKey: ["posts", page, pageSize, category],
-    queryFn: () => getPosts(page, pageSize, category),
-  });
-}
-
-export function usePost(slug: string) {
-  return useQuery({
-    queryKey: ["post", slug],
-    queryFn: () => getPostBySlug(slug),
-    enabled: !!slug,
-  });
-}
-
-export function useFeaturedPosts(limit: number = 3) {
-  return useQuery({
-    queryKey: ["posts", "featured", limit],
-    queryFn: () => getFeaturedPosts(limit),
-  });
-}
-
-export function useRecentPosts(limit: number = 5) {
-  return useQuery({
-    queryKey: ["posts", "recent", limit],
-    queryFn: () => getRecentPosts(limit),
-  });
+async function fetchSearchResults(query: string): Promise<SearchResult[]> {
+  const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+  if (!res.ok) throw new Error("Search failed");
+  const { data } = await res.json();
+  return data;
 }
 
 export function useSearch(query: string) {
   return useQuery({
     queryKey: ["search", query],
-    queryFn: () => searchContent(query),
+    queryFn: () => fetchSearchResults(query),
     enabled: query.length >= 2,
   });
 }

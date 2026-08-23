@@ -1,14 +1,5 @@
 import { config, fields, collection } from '@keystatic/core';
 
-const CATEGORY_OPTIONS = [
-  { label: 'Technology', value: 'technology' },
-  { label: 'Web Development', value: 'web-development' },
-  { label: 'Programming', value: 'programming' },
-  { label: 'DevOps', value: 'devops' },
-  { label: 'Career', value: 'career' },
-  { label: 'Tutorials', value: 'tutorials' },
-] as const;
-
 export default config({
   storage: {
     kind: 'local',
@@ -33,10 +24,9 @@ export default config({
           publicPath: '/images/posts/',
           validation: { isRequired: false },
         }),
-        category: fields.select({
+        category: fields.text({
           label: 'Category',
-          options: CATEGORY_OPTIONS,
-          defaultValue: 'technology',
+          defaultValue: 'Technology',
         }),
         tags: fields.array(fields.text({ label: 'Tag' }), {
           label: 'Tags',
@@ -45,6 +35,7 @@ export default config({
         createdAt: fields.date({
           label: 'Published date',
           defaultValue: { kind: 'today' },
+          validation: { isRequired: true },
         }),
         featured: fields.checkbox({
           label: 'Featured',

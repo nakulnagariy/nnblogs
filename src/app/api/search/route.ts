@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { searchContent } from '@/lib/supabase/queries';
+import { searchContent } from '@/lib/content/posts';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
 export async function GET(request: NextRequest) {

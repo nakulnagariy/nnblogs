@@ -1,4 +1,4 @@
-// Database Types
+// Content Types
 export interface BlogPost {
   id: string;
   title: string;
@@ -8,11 +8,9 @@ export interface BlogPost {
   featured_image?: string;
   category: string;
   tags: string[];
-  author_id: string;
-  published: boolean;
+  featured: boolean;
   created_at: string;
   updated_at: string;
-  views: number;
 }
 
 export interface Category {

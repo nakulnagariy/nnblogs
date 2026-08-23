@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, Clock, Eye, ArrowLeft } from 'lucide-react';
-import { getPostBySlug, incrementPostViews, getRelatedPosts } from '@/lib/supabase/queries';
+import { Calendar, Clock, ArrowLeft } from 'lucide-react';
+import { getPostBySlug, getRelatedPosts } from '@/lib/content/posts';
 import { MarkdownRenderer, BlogPostClientWrapper, TableOfContents } from '@/components/blog';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { formatDate, getReadingTime } from '@/lib/utils';
@@ -42,7 +42,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  incrementPostViews(slug).catch(console.error);
   const relatedPosts = await getRelatedPosts(slug, post.category, 3).catch(() => []);
   const headings = extractHeadings(post.content);
 
@@ -92,10 +91,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5" />
                   {getReadingTime(post.content)}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Eye className="w-3.5 h-3.5" />
-                  {post.views} views
                 </span>
               </div>
             </header>
