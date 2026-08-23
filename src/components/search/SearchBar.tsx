@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, X, FileText, Video, FolderGit2, BookOpen } from 'lucide-react';
+import { Search, X, FileText } from 'lucide-react';
 import { analytics } from '@/lib/analytics';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
@@ -16,20 +16,6 @@ interface SearchBarProps {
   autoFocus?: boolean;
   onResultClick?: () => void;
 }
-
-const typeIcons = {
-  post: FileText,
-  video: Video,
-  project: FolderGit2,
-  topic: BookOpen,
-};
-
-const typeColors = {
-  post: 'text-foreground',
-  video: 'text-red-500',
-  project: 'text-muted-foreground',
-  topic: 'text-primary',
-};
 
 export function SearchBar({ className, autoFocus, onResultClick }: SearchBarProps) {
   const router = useRouter();
@@ -60,14 +46,8 @@ export function SearchBar({ className, autoFocus, onResultClick }: SearchBarProp
     (result: SearchResult, index: number) => {
       // Track search result click
       analytics.search.resultClick(query, result.type, result.slug, index);
-      
-      const paths = {
-        post: `/blog/${result.slug}`,
-        video: `/videos/${result.slug}`,
-        project: `/projects#${result.slug}`,
-        topic: `/learn/${result.category ?? ""}/${result.slug}`,
-      };
-      router.push(paths[result.type]);
+
+      router.push(`/blog/${result.slug}`);
       setIsOpen(false);
       setQuery('');
       onResultClick?.();
@@ -86,7 +66,7 @@ export function SearchBar({ className, autoFocus, onResultClick }: SearchBarProp
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           type="search"
-          placeholder="Search posts, videos, projects..."
+          placeholder="Search posts..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.length >= 2 && setIsOpen(true)}
@@ -114,28 +94,25 @@ export function SearchBar({ className, autoFocus, onResultClick }: SearchBarProp
             </div>
           ) : results && results.length > 0 ? (
             <ul className="py-2">
-              {results.map((result, index) => {
-                const Icon = typeIcons[result.type];
-                return (
-                  <li key={`${result.type}-${result.id}`}>
-                    <button
-                      className="w-full px-4 py-3 text-left hover:bg-accent transition-colors flex items-start gap-3"
-                      onClick={() => handleResultClick(result, index)}
-                    >
-                      <Icon className={cn('h-5 w-5 mt-0.5 shrink-0', typeColors[result.type])} />
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium line-clamp-1">{result.title}</div>
-                        <div className="text-sm text-muted-foreground line-clamp-1">
-                          {result.excerpt}
-                        </div>
-                        <div className="text-xs text-muted-foreground mt-1 capitalize">
-                          {result.type} {result.category && `• ${result.category}`}
-                        </div>
+              {results.map((result, index) => (
+                <li key={result.id}>
+                  <button
+                    className="w-full px-4 py-3 text-left hover:bg-accent transition-colors flex items-start gap-3"
+                    onClick={() => handleResultClick(result, index)}
+                  >
+                    <FileText className="h-5 w-5 mt-0.5 shrink-0 text-foreground" />
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium line-clamp-1">{result.title}</div>
+                      <div className="text-sm text-muted-foreground line-clamp-1">
+                        {result.excerpt}
                       </div>
-                    </button>
-                  </li>
-                );
-              })}
+                      {result.category && (
+                        <div className="text-xs text-muted-foreground mt-1">{result.category}</div>
+                      )}
+                    </div>
+                  </button>
+                </li>
+              ))}
             </ul>
           ) : (
             <div className="py-8 text-center text-muted-foreground">

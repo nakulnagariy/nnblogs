@@ -3,10 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { X, LogOut } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useUser } from '@/components/providers/SupabaseProvider';
-import { createClient } from '@/lib/supabase/client';
+import { X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 
@@ -18,24 +15,11 @@ interface MobileMenuProps {
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Learn', href: '/learn' },
-  { name: 'Videos', href: '/videos' },
-  { name: 'Projects', href: '/projects' },
   { name: 'About', href: '/about' },
 ];
 
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const { user } = useUser();
-
-  const handleSignOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    onClose();
-    router.push('/');
-    router.refresh();
-  };
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -98,7 +82,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex flex-col p-4 pb-32 space-y-2 overflow-y-auto max-h-[calc(100vh-8rem)] bg-background" aria-label="Mobile navigation">
+        <nav className="flex flex-col p-4 space-y-2 overflow-y-auto max-h-[calc(100vh-4.5rem)] bg-background" aria-label="Mobile navigation">
           {navigation.map((item) => (
             <Link
               key={item.name}
@@ -117,25 +101,6 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             </Link>
           ))}
         </nav>
-
-        {/* Footer Actions */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border/40 bg-background shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.5)]">
-          {user ? (
-            <button
-              onClick={handleSignOut}
-              className="flex items-center gap-2 w-full px-4 py-3 text-sm font-medium text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/60 transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign out
-            </button>
-          ) : (
-            <Link href="/sign-in" onClick={onClose}>
-              <Button className="w-full bg-foreground text-background hover:bg-foreground/90 font-medium" size="lg">
-                Sign In
-              </Button>
-            </Link>
-          )}
-        </div>
       </div>
     </>
   );

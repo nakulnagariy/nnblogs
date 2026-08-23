@@ -4,8 +4,6 @@ import { Github, Linkedin, Mail, Rss } from 'lucide-react';
 const explore = [
   { name: 'Home', href: '/' },
   { name: 'Blog', href: '/blog' },
-  { name: 'Videos', href: '/videos' },
-  { name: 'Projects', href: '/projects' },
   { name: 'About', href: '/about' },
 ];
 
