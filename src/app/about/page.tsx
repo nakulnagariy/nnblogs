@@ -1,9 +1,9 @@
-'use client';
-
 import Link from 'next/link';
 import { Github, Linkedin, Mail, Rss, ArrowUpRight } from 'lucide-react';
 import { ScrollProgress } from '@/components/ui/ScrollProgress';
 import { JourneyTimeline } from '@/components/about/JourneyTimeline';
+import { GitHubReposList } from '@/components/github';
+import { getPinnedRepos } from '@/lib/github';
 
 const stack = [
   'TypeScript', 'React', 'Next.js', 'Node.js',
@@ -18,7 +18,9 @@ const socials = [
   { label: 'Email', href: 'mailto:nakul@example.com', icon: Mail },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const repos = await getPinnedRepos();
+
   return (
     <>
       <ScrollProgress position="top" />
@@ -117,6 +119,27 @@ export default function AboutPage() {
             ))}
           </div>
         </section>
+
+        {/* Projects (GitHub) */}
+        {repos.length > 0 && (
+          <section className="py-12 border-b border-border/40">
+            <div className="flex items-end justify-between mb-8">
+              <p className="text-xs font-mono tracking-widest uppercase text-muted-foreground">
+                Projects
+              </p>
+              <a
+                href="https://github.com/nakulnagariya?tab=repositories"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-mono tracking-widest uppercase text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+              >
+                All Repos
+                <ArrowUpRight className="w-3 h-3" />
+              </a>
+            </div>
+            <GitHubReposList repos={repos} />
+          </section>
+        )}
 
         {/* CTA */}
         <section className="py-12 border-b border-border/40">
