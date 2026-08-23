@@ -6,14 +6,14 @@ import type { TocHeading } from '@/lib/markdown';
 
 interface TableOfContentsProps {
   headings: TocHeading[];
+  hideLabel?: boolean;
 }
 
 /**
- * Sticky "On this page" sidebar component.
- * Highlights the currently visible section as the user scrolls,
- * and supports smooth-scroll navigation to any heading.
+ * "On this page" navigation. Highlights the currently visible section as the
+ * user scrolls, and supports smooth-scroll navigation to any heading.
  */
-export function TableOfContents({ headings }: TableOfContentsProps) {
+export function TableOfContents({ headings, hideLabel = false }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState<string>('');
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -69,9 +69,11 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
   return (
     <nav aria-label="Table of contents">
-      <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
-        On this page
-      </p>
+      {!hideLabel && (
+        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
+          On this page
+        </p>
+      )}
       <ul className="space-y-1">
         {headings.map(({ id, text, level }) => (
           <li key={id}>

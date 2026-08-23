@@ -9,19 +9,6 @@ export const Dialog = dynamic(() => import('../ui/Dialog').then(mod => mod.Dialo
   ssr: false,
 });
 
-export const MarkdownEditor = dynamic(
-  () => import('../blog/MarkdownEditor'),
-  {
-    loading: () => (
-      <div className="space-y-4">
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-96 w-full" />
-      </div>
-    ),
-    ssr: false,
-  }
-);
-
 export const GitHubProfile = dynamic(
   () => import('../github/GitHubProfile').then(mod => mod.GitHubProfile),
   {

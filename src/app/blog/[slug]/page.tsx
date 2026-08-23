@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, Clock, ArrowLeft } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, ChevronDown } from 'lucide-react';
 import { getPostBySlug, getRelatedPosts } from '@/lib/content/posts';
 import { MarkdownRenderer, BlogPostClientWrapper, TableOfContents } from '@/components/blog';
 import { BlogCard } from '@/components/blog/BlogCard';
@@ -47,7 +47,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <BlogPostClientWrapper slug={slug} title={post.title} category={post.category}>
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="container mx-auto px-6 max-w-3xl">
 
         {/* Back link */}
         <div className="pt-20 pb-8">
@@ -60,86 +60,83 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </Link>
         </div>
 
-        {/* Two-column layout: article + TOC sidebar */}
-        <div className="flex gap-12 xl:gap-16 items-start">
-
-          {/* Main article content */}
-          <div className="flex-1 min-w-0">
-            {/* Article header */}
-            <header className="pb-10 border-b border-border/40">
-              {/* Category + tags */}
-              <div className="flex flex-wrap items-center gap-2 mb-6">
-                <span className="px-2.5 py-0.5 rounded-full text-xs bg-muted text-muted-foreground">
-                  {post.category}
-                </span>
-                {post.tags?.map((tag) => (
-                  <span key={tag} className="text-xs font-mono text-muted-foreground">
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight mb-6">
-                {post.title}
-              </h1>
-
-              <div className="flex flex-wrap items-center gap-5 text-xs font-mono text-muted-foreground">
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <time dateTime={post.created_at}>{formatDate(post.created_at)}</time>
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5" />
-                  {getReadingTime(post.content)}
-                </span>
-              </div>
-            </header>
-
-            {/* Featured image */}
-            {post.featured_image && (
-              <div className="relative aspect-video my-10 rounded-xl overflow-hidden">
-                <Image
-                  src={post.featured_image}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            )}
-
-            {/* Content */}
-            <div className="py-10">
-              <MarkdownRenderer content={post.content} />
-            </div>
-
-            {/* Post footer */}
-            <footer className="py-8 border-t border-border/40 mb-16">
-              <Link
-                href="/blog"
-                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                More Posts
-              </Link>
-            </footer>
+        {/* Article header */}
+        <header className="pb-10 border-b border-border/40">
+          {/* Category + tags */}
+          <div className="flex flex-wrap items-center gap-2 mb-6">
+            <span className="px-2.5 py-0.5 rounded-full text-xs bg-muted text-muted-foreground">
+              {post.category}
+            </span>
+            {post.tags?.map((tag) => (
+              <span key={tag} className="text-xs font-mono text-muted-foreground">
+                #{tag}
+              </span>
+            ))}
           </div>
 
-          {/* "On this page" sticky TOC sidebar — only on large screens */}
-          {headings.length > 1 && (
-            <aside className="hidden xl:block w-56 shrink-0">
-              <div className="sticky top-24 pt-2 max-h-[calc(100vh-6rem)] overflow-y-auto">
-                <TableOfContents headings={headings} />
-              </div>
-            </aside>
-          )}
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight leading-tight mb-6">
+            {post.title}
+          </h1>
+
+          <div className="flex flex-wrap items-center gap-5 text-xs font-mono text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5" />
+              <time dateTime={post.created_at}>{formatDate(post.created_at)}</time>
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5" />
+              {getReadingTime(post.content)}
+            </span>
+          </div>
+        </header>
+
+        {/* Featured image */}
+        {post.featured_image && (
+          <div className="relative aspect-video my-10 rounded-xl overflow-hidden">
+            <Image
+              src={post.featured_image}
+              alt={post.title}
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        )}
+
+        {/* On this page */}
+        {headings.length > 1 && (
+          <details className="group my-8 rounded-lg border border-border/60 px-4 py-3">
+            <summary className="flex cursor-pointer list-none items-center justify-between text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              On this page
+              <ChevronDown className="w-3.5 h-3.5 transition-transform group-open:rotate-180" />
+            </summary>
+            <div className="pt-4">
+              <TableOfContents headings={headings} hideLabel />
+            </div>
+          </details>
+        )}
+
+        {/* Content */}
+        <div className="py-10">
+          <MarkdownRenderer content={post.content} />
         </div>
+
+        {/* Post footer */}
+        <footer className="py-8 border-t border-border/40 mb-16">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            More Posts
+          </Link>
+        </footer>
       </div>
 
       {/* Related posts */}
       {relatedPosts.length > 0 && (
         <section className="border-t border-border/40">
-          <div className="container mx-auto px-6 max-w-6xl py-16">
+          <div className="container mx-auto px-6 max-w-5xl py-16">
             <p className="text-xs font-mono tracking-widest uppercase text-muted-foreground mb-8">
               Related Reading
             </p>
@@ -154,5 +151,3 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     </BlogPostClientWrapper>
   );
 }
-
-

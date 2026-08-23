@@ -1,12 +1,7 @@
-'use client';
-
-import { useState } from 'react';
 import Link from 'next/link';
-import { BlogCard } from '@/components/blog/BlogCard';
-import { BlogTimeline } from '@/components/blog/BlogTimeline';
+import { Clock, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { ScrollProgress } from '@/components/ui/ScrollProgress';
-import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, LayoutGrid, AlignJustify, X } from 'lucide-react';
+import { cn, formatDate, getReadingTime, truncate } from '@/lib/utils';
 import type { BlogPost } from '@/types';
 
 interface BlogClientProps {
@@ -30,56 +25,21 @@ function pageHref(page: number, category: string | null) {
 }
 
 export function BlogClient({ posts, page, totalPages, categories, activeCategory }: BlogClientProps) {
-  const [viewMode, setViewMode] = useState<'timeline' | 'grid'>('timeline');
-
-  const timelinePosts = posts.map((p) => ({ ...p, published_at: p.created_at }));
-
   return (
     <>
       <ScrollProgress position="top" />
 
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="container mx-auto px-6 max-w-3xl">
 
         {/* Page header */}
         <header className="pt-24 pb-10 border-b border-border/40">
           <p className="text-xs font-mono tracking-widest uppercase text-muted-foreground mb-4">
             Writing
           </p>
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
-              <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">Blog</h1>
-              <p className="mt-3 text-base text-muted-foreground max-w-xl">
-                Thoughts, tutorials and insights on web development, AI, and building things.
-              </p>
-            </div>
-            {/* View toggle */}
-            <div className="flex items-center gap-1 shrink-0">
-              <button
-                onClick={() => setViewMode('timeline')}
-                className={cn(
-                  'p-2 rounded-lg transition-colors',
-                  viewMode === 'timeline'
-                    ? 'bg-muted text-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
-                )}
-                aria-label="Timeline view"
-              >
-                <AlignJustify className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setViewMode('grid')}
-                className={cn(
-                  'p-2 rounded-lg transition-colors',
-                  viewMode === 'grid'
-                    ? 'bg-muted text-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/60'
-                )}
-                aria-label="Grid view"
-              >
-                <LayoutGrid className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">Blog</h1>
+          <p className="mt-3 text-base text-muted-foreground max-w-xl">
+            Thoughts, tutorials and insights on web development, AI, and building things.
+          </p>
         </header>
 
         {/* Category filter strip */}
@@ -105,7 +65,7 @@ export function BlogClient({ posts, page, totalPages, categories, activeCategory
           )}
         </div>
 
-        {/* Content */}
+        {/* Post list */}
         <div className="py-4">
           {posts.length === 0 && (
             <p className="py-20 text-center text-sm text-muted-foreground">
@@ -113,15 +73,32 @@ export function BlogClient({ posts, page, totalPages, categories, activeCategory
             </p>
           )}
 
-          {posts.length > 0 && viewMode === 'timeline' && <BlogTimeline posts={timelinePosts} />}
-
-          {posts.length > 0 && viewMode === 'grid' && (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 py-4">
-              {posts.map((post) => (
-                <BlogCard key={post.id} post={post} />
-              ))}
-            </div>
-          )}
+          <div className="divide-y divide-border/40">
+            {posts.map((post) => (
+              <Link
+                key={post.id}
+                href={`/blog/${post.slug}`}
+                className="group block py-8 first:pt-0"
+              >
+                <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">
+                  {post.category}
+                </p>
+                <h2 className="text-xl sm:text-2xl font-semibold tracking-tight group-hover:text-muted-foreground transition-colors">
+                  {post.title}
+                </h2>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  {truncate(post.excerpt, 160)}
+                </p>
+                <div className="mt-4 flex items-center gap-4 text-xs text-muted-foreground font-mono">
+                  <time dateTime={post.created_at}>{formatDate(post.created_at)}</time>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {getReadingTime(post.content)}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* Pagination */}
