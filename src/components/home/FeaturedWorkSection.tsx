@@ -31,7 +31,7 @@ export function FeaturedWorkSection({ posts }: FeaturedWorkSectionProps) {
         >
           <div className="flex items-end justify-between mb-12">
             <p className="text-xs font-mono tracking-[0.2em] uppercase text-muted-foreground">
-              Featured Articles
+              Recent Posts
             </p>
             <Link
               href="/blog"
@@ -43,7 +43,7 @@ export function FeaturedWorkSection({ posts }: FeaturedWorkSectionProps) {
           </div>
 
           {articles.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-8">No featured posts yet.</p>
+            <p className="text-sm text-muted-foreground py-8">No posts yet.</p>
           ) : (
             <div className="flex flex-col divide-y divide-border/40">
               {articles.map((article, i) => (

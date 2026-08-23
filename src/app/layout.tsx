@@ -69,7 +69,7 @@ export default async function RootLayout({
       <html lang="en" suppressHydrationWarning>
         <body className={`${inter.variable} font-sans antialiased`}>
           <ThemeProvider
-            attribute="class"
+            attribute="data-nn-theme"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
