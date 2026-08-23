@@ -4,8 +4,7 @@ import { Inter } from 'next/font/google';
 import { QueryProvider } from '@/components/providers/QueryProvider';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { GoogleAnalytics } from '@/components/analytics';
-import { Header } from '@/components/layout/Header';
-import { Footer } from '@/components/layout/Footer';
+import { SiteChrome } from '@/components/layout/SiteChrome';
 import { SkipToContent } from '@/components/ui/SkipToContent';
 import './globals.css';
 
@@ -70,13 +69,7 @@ export default function RootLayout({
           <QueryProvider>
             <GoogleAnalytics />
             <SkipToContent />
-            <div className="flex min-h-screen flex-col">
-              <Header />
-              <main id="main-content" className="flex-1" tabIndex={-1}>
-                {children}
-              </main>
-              <Footer />
-            </div>
+            <SiteChrome>{children}</SiteChrome>
           </QueryProvider>
         </ThemeProvider>
       </body>
