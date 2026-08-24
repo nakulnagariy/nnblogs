@@ -1,0 +1,45 @@
+title: "Why I Moved This Blog to Git and Keystatic"
+excerpt: "This blog used to run on Supabase — a full database, an auth system, an admin dashboard. None of that made sense for a site with exactly one author. Here's what replaced it."
+featuredImage: null
+category: "Technology"
+tags:
+  - "keystatic"
+  - "architecture"
+  - "nextjs"
+createdAt: 2026-08-24
+featured: false
+draft: false
+content: |
+  For a while, this blog was backed by Supabase: a Postgres database, Supabase Auth, an `/admin` dashboard with full CRUD screens for posts, and a handful of other content types that never really got used. It worked, but it was a lot of infrastructure for what is, at the end of the day, a single person writing posts and merging their own pull requests.
+
+  So I ripped it out and replaced it with two much simpler things: **Markdown files in this repo**, and **Keystatic** as the editor.
+
+  #### The core idea
+
+  Every post lives at `content/posts/<slug>/index.yaml` — a plain YAML file with frontmatter-style fields (title, excerpt, category, tags, published date) and a `content` field holding the raw Markdown body. This very post is one of those files. There's no database row anywhere; the file *is* the post.
+
+  Publishing is just:
+
+  ```bash
+  git add content/posts/why-i-moved-my-blog-to-git-and-keystatic
+  git commit -m "post: why I moved to git and keystatic"
+  git push
+  ```
+
+  Merge to `main`, and it's live. No separate "publish" step, no deploy hook to babysit — the same git workflow I already use for code changes.
+
+  #### Where Keystatic fits in
+
+  Hand-editing YAML files works, but it's not a pleasant way to write a blog post. Keystatic gives me a proper editor UI at `/keystatic` — running locally via `next dev` — with real form fields for title, excerpt, category, tags, and a text area for the Markdown body. Click Save, and it writes the exact file shown above straight to disk. It doesn't run in production; it's strictly a local authoring tool that happens to be part of this same Next.js app.
+
+  A few reasons this fit better than the old admin dashboard:
+
+  - **No auth to build or maintain.** The only "permission" that matters is who can push to this repo and merge to `main` — GitHub already enforces that. Keystatic's local mode doesn't add a login screen on top of it.
+  - **Content is versioned for free.** Every edit is a commit. `git log` on a post's file *is* its edit history.
+  - **The Markdown pipeline didn't change.** Keystatic can also store content as a rich-text/Markdoc document with its own renderer, but I kept the `content` field as a plain string instead — so the existing `marked`-based rendering, syntax highlighting, and heading-extraction code kept working exactly as it did before, untouched.
+
+  #### What's still rough
+
+  It's not perfect. The content field is a plain textarea — no live Markdown preview while typing, no formatting toolbar. There's a **Preview** link in the editor that opens the real rendered page in a new tab, but only after hitting Save, not on every keystroke. Draft posts (via the `draft` checkbox) don't show up in the blog listing or the homepage, but they *are* reachable directly by URL, which turns out to be exactly what makes that Preview link work.
+
+  Whether that trade-off is worth it depends entirely on how much the editing experience matters to you versus how much infrastructure you're willing to run for a single-author blog. For this one, it was an easy call.
