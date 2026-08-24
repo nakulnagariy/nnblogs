@@ -36,7 +36,7 @@ without checking it against the code first.
 
 - **Framework Stack:** Next.js 16.1.1 (App Router), React 19.2.3, Tailwind CSS v4 (with PostCSS), TypeScript 5 (Strict Mode).
 - **Data Flow Layers:** `/blog` and `/blog/[slug]` are Server Components calling `lib/content/posts.ts` directly — a thin wrapper over `@keystatic/core/reader` reading `content/posts/`. Client-side interactivity is limited to live search (`hooks/usePosts.ts`'s `useSearch`, backed by `/api/search`, using TanStack Query for its debounce/cache behavior) — everything else fetches server-side, since Keystatic's reader uses Node's `fs` and cannot run in the browser.
-- **Content model:** `keystatic.config.ts` defines the `posts` collection schema. Post body content is a plain `fields.text({multiline: true})`, not Keystatic's rich-text/Markdoc field — this was a deliberate choice so the existing, tested Markdown pipeline (`marked` + custom renderers in `lib/markdown.ts`, sanitized via DOMPurify in `MarkdownRenderer.tsx`) keeps working unchanged against a plain string.
+- **Content model:** `keystatic.config.ts` defines the `posts` collection schema. Post body content is `fields.markdoc()` (Keystatic's rich-text/WYSIWYG editor) with `format.contentField` splitting it into its own section on disk — `content/posts/<slug>/index.mdoc` (frontmatter block + Markdoc/Markdown body), not `index.yaml`. `BlogPost.content` is the parsed Markdoc AST (`Node`), rendered via `Markdoc.transform()` + `Markdoc.renderers.react()` in `MarkdownRenderer.tsx` with custom node overrides for syntax-highlighted code, heading anchor ids, external-link handling, and figure/figcaption images — see that file's top comment for two non-obvious Markdoc renderer quirks it works around. `BlogPost.contentText` (`Markdoc.format(node)`) is the plain-Markdown-string rendition used by `extractHeadings`/`getReadingTime`/search, so those stayed string-based and untouched.
 - **No database, no auth:** there is no `middleware.ts`, no session/auth check anywhere in the app. Writing a post means running Keystatic locally and committing the result; nothing gates `npm run dev` itself.
 - **API Response Standard:** Route handlers in `app/api/[resource]/route.ts` must validate input and return a consistent error structure: `{ error: string }`.
 
@@ -45,10 +45,11 @@ without checking it against the code first.
 | Path                          | Purpose                                                              |
 | :----------------------------- | :-------------------------------------------------------------------- |
 | `keystatic.config.ts`          | Keystatic collection schema — the source of truth for post fields    |
-| `content/posts/*/index.yaml`   | Post content, one directory per slug                                 |
+| `content/posts/*/index.mdoc`   | Post content, one directory per slug (frontmatter + Markdoc body)     |
 | `src/lib/content/posts.ts`     | All post read queries (file-based, replaces the old Supabase queries)|
+| `src/components/blog/MarkdownRenderer.tsx` | Markdoc AST → React rendering, incl. the node-schema overrides for code/headings/links/images |
 | `src/types/index.ts`           | Centralized domain models (`BlogPost`, `SearchResult`, etc.)         |
-| `src/lib/markdown.ts`          | Markdown parsing/rendering + pure string utilities (slug, excerpt, reading time, heading extraction) — covered by `tests/lib/markdown.test.ts` |
+| `src/lib/markdown.ts`          | Pure string utilities only now (`headingToId`, `extractHeadings`) — covered by `tests/lib/markdown.test.ts` |
 | `src/app/globals.css`          | Design tokens — imports `nn-design/tokens.css`, aliases the old shadcn-style utility names (`bg-background`, `text-muted-foreground`, etc.) onto it |
 | `tests/setup.ts`               | Vitest global testing suite setup                                    |
 
@@ -63,7 +64,8 @@ Keystatic's local storage mode needs no env vars or secrets of its own.
 ## Critical Rules
 
 - No database, no auth — do not reintroduce either without an explicit ask. If a feature seems to need persistence beyond the content in `content/posts/`, flag it rather than reaching for a DB by default.
-- Post content stays a plain string field in Keystatic (see Content model above) — don't switch it to `fields.document`/Markdoc without deliberately deciding to rewrite the Markdown rendering pipeline along with it.
+- Post content is a Markdoc AST, not a plain string (see Content model above) — anything that needs plain text (search, reading time, heading extraction) should use `post.contentText`, not `post.content`.
+- Markdoc's react renderer only applies a `components` override to tag names starting with an uppercase letter, and `heading`/`fence`'s default node schemas hardcode their own output tag inside a custom `transform()` that ignores the schema's `render` property — see the top comment in `MarkdownRenderer.tsx` before changing how any node type renders.
 - `src/lib/content/posts.ts`'s exported function signatures (`getPosts`, `getPostBySlug`, `getFeaturedPosts`, `getRecentPosts`, `getRelatedPosts`, `getCategories`, `searchContent`) are relied on by both server components and the search API — keep them stable, or update every call site in the same change.
 
 ---
@@ -72,8 +74,11 @@ Keystatic's local storage mode needs no env vars or secrets of its own.
 > tokens + spare homepage; Keystatic + content migration off Supabase;
 > single-column Medium-style blog redesign; removed Supabase/auth/videos/
 > projects/learn entirely; GitHub-repos widget on /about; dependency/env/doc
-> cleanup). Committed as 6 separate commits on `feat/revamp-nnblog`, working
-> tree clean, build/lint/tests all green.
+> cleanup; fixed a max-w-* token collision and a /keystatic rendering bug
+> found after the fact). Then switched post content from a plain text field
+> to Keystatic's Markdoc rich-text editor on request, rewriting
+> MarkdownRenderer accordingly. All committed on `feat/revamp-nnblog`,
+> working tree clean, build/lint/tests all green.
 >
 > Known follow-ups, not yet done:
 > - `.claude/rules/*.md` (11 files) and the rest of `docs/` still describe
