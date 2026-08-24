@@ -2,7 +2,7 @@ import { SearchBar } from '@/components/search/SearchBar';
 
 export const metadata = {
   title: 'Search',
-  description: 'Search for blog posts, videos, and projects.',
+  description: 'Search blog posts.',
 };
 
 export default function SearchPage() {
@@ -16,7 +16,7 @@ export default function SearchPage() {
           Find anything
         </h1>
         <p className="text-lg text-muted-foreground max-w-xl">
-          Search across blog posts, videos, and projects.
+          Search across blog posts.
         </p>
       </header>
 

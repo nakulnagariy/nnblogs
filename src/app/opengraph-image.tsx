@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "NNBlogs — Personal Blog & Portfolio";
+export const alt = "NNBlogs — Personal Blog";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -98,8 +98,7 @@ export default function OgImage() {
               maxWidth: "700px",
             }}
           >
-            Personal blog & portfolio — articles, videos, and projects on web
-            development.
+            Articles on web development, AI, and building things.
           </p>
         </div>
 

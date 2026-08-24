@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { Inter } from 'next/font/google';
-import { QueryProvider } from '@/components/providers/QueryProvider';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { GoogleAnalytics } from '@/components/analytics';
 import { SiteChrome } from '@/components/layout/SiteChrome';
@@ -66,11 +65,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <QueryProvider>
-            <GoogleAnalytics />
-            <SkipToContent />
-            <SiteChrome>{children}</SiteChrome>
-          </QueryProvider>
+          <GoogleAnalytics />
+          <SkipToContent />
+          <SiteChrome>{children}</SiteChrome>
         </ThemeProvider>
       </body>
     </html>
