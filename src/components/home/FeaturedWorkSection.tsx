@@ -4,21 +4,20 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
-import type { BlogPost } from '@/types';
 
-interface FeaturedWorkSectionProps {
-  posts: BlogPost[];
+export interface FeaturedArticle {
+  category: string;
+  title: string;
+  excerpt: string;
+  href: string;
 }
 
-export function FeaturedWorkSection({ posts }: FeaturedWorkSectionProps) {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+interface FeaturedWorkSectionProps {
+  articles: FeaturedArticle[];
+}
 
-  const articles = posts.map((post) => ({
-    category: post.category,
-    title: post.title,
-    excerpt: post.excerpt || '',
-    href: `/blog/${post.slug}`,
-  }));
+export function FeaturedWorkSection({ articles }: FeaturedWorkSectionProps) {
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
     <section id="articles" className="py-24 md:py-32 border-b border-border/40">
@@ -31,7 +30,7 @@ export function FeaturedWorkSection({ posts }: FeaturedWorkSectionProps) {
         >
           <div className="flex items-end justify-between mb-12">
             <p className="text-xs font-mono tracking-[0.2em] uppercase text-muted-foreground">
-              Featured Articles
+              Recent Posts
             </p>
             <Link
               href="/blog"
@@ -43,7 +42,7 @@ export function FeaturedWorkSection({ posts }: FeaturedWorkSectionProps) {
           </div>
 
           {articles.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-8">No featured posts yet.</p>
+            <p className="text-sm text-muted-foreground py-8">No posts yet.</p>
           ) : (
             <div className="flex flex-col divide-y divide-border/40">
               {articles.map((article, i) => (

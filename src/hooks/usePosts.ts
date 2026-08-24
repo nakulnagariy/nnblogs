@@ -1,51 +1,55 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import {
-  getPosts,
-  getPostBySlug,
-  getFeaturedPosts,
-  getRecentPosts,
-  searchContent,
-} from "@/lib/supabase/queries";
+import { useEffect, useState } from "react";
+import type { SearchResult } from "@/types";
 
-export function usePosts(
-  page: number = 1,
-  pageSize: number = 10,
-  category?: string,
-) {
-  return useQuery({
-    queryKey: ["posts", page, pageSize, category],
-    queryFn: () => getPosts(page, pageSize, category),
-  });
+interface UseSearchResult {
+  data: SearchResult[] | undefined;
+  isLoading: boolean;
+  error: Error | null;
 }
 
-export function usePost(slug: string) {
-  return useQuery({
-    queryKey: ["post", slug],
-    queryFn: () => getPostBySlug(slug),
-    enabled: !!slug,
-  });
+interface SearchState {
+  query: string;
+  data: SearchResult[] | undefined;
+  error: Error | null;
 }
 
-export function useFeaturedPosts(limit: number = 3) {
-  return useQuery({
-    queryKey: ["posts", "featured", limit],
-    queryFn: () => getFeaturedPosts(limit),
-  });
-}
+export function useSearch(query: string): UseSearchResult {
+  const [state, setState] = useState<SearchState>({ query: "", data: undefined, error: null });
+  const enabled = query.length >= 2;
 
-export function useRecentPosts(limit: number = 5) {
-  return useQuery({
-    queryKey: ["posts", "recent", limit],
-    queryFn: () => getRecentPosts(limit),
-  });
-}
+  useEffect(() => {
+    if (!enabled) return;
 
-export function useSearch(query: string) {
-  return useQuery({
-    queryKey: ["search", query],
-    queryFn: () => searchContent(query),
-    enabled: query.length >= 2,
-  });
+    let cancelled = false;
+
+    fetch(`/api/search?q=${encodeURIComponent(query)}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Search failed");
+        return res.json();
+      })
+      .then(({ data }: { data: SearchResult[] }) => {
+        if (!cancelled) setState({ query, data, error: null });
+      })
+      .catch((err: unknown) => {
+        if (!cancelled) {
+          setState({
+            query,
+            data: undefined,
+            error: err instanceof Error ? err : new Error("Search failed"),
+          });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [query, enabled]);
+
+  return {
+    data: enabled ? state.data : undefined,
+    isLoading: enabled && state.query !== query,
+    error: enabled ? state.error : null,
+  };
 }

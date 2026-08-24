@@ -4,17 +4,12 @@ import { motion, useScroll, useSpring } from 'framer-motion';
 
 interface ScrollProgressProps {
   position?: 'top' | 'bottom';
-  color?: string;
   height?: number;
 }
 
-export function ScrollProgress({ 
-  position = 'top', 
-  color = 'primary',
-  height = 4 
-}: ScrollProgressProps) {
+export function ScrollProgress({ position = 'top', height = 4 }: ScrollProgressProps) {
   const { scrollYProgress } = useScroll();
-  
+
   // Add spring physics for smooth animation
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -28,7 +23,8 @@ export function ScrollProgress({
       style={{
         scaleX,
         height: `${height}px`,
-        background: `linear-gradient(90deg, hsl(var(--${color})), hsl(var(--purple-500)), hsl(var(--blue-500)))`,
+        background:
+          'linear-gradient(90deg, var(--nn-color-primary), var(--nn-indigo-400), var(--nn-sky-500))',
         transformOrigin: '0%',
       }}
     />
@@ -58,7 +54,7 @@ export function ReadingProgress({ className = '' }: ReadingProgressProps) {
         style={{
           scaleX,
           background:
-            'linear-gradient(90deg, hsl(var(--primary)), #a855f7, #3b82f6)',
+            'linear-gradient(90deg, var(--nn-color-primary), var(--nn-indigo-400), var(--nn-sky-500))',
         }}
       />
 

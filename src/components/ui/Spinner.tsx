@@ -17,11 +17,3 @@ export function Spinner({ className, size = 'md' }: SpinnerProps) {
     <Loader2 className={cn('animate-spin text-muted-foreground', sizeClasses[size], className)} />
   );
 }
-
-export function LoadingScreen() {
-  return (
-    <div className="flex min-h-[400px] items-center justify-center">
-      <Spinner size="lg" />
-    </div>
-  );
-}

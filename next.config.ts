@@ -16,11 +16,14 @@ const cspDirectives = [
     "https://www.google-analytics.com",
   ].join(" "),
 
-  // Tailwind / component libraries inject inline styles
-  "style-src 'self' 'unsafe-inline'",
+  // Tailwind / component libraries inject inline styles.
+  // Keystatic's admin UI (/keystatic) loads Inter directly from Google
+  // Fonts rather than using next/font like the rest of the app does.
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
 
-  // next/font self-hosts Google Fonts — no external font CDN needed
-  "font-src 'self'",
+  // next/font self-hosts Google Fonts for the main site; fonts.gstatic.com
+  // is where the stylesheet above actually points for the font files.
+  "font-src 'self' https://fonts.gstatic.com",
 
   // Images from allowed external hosts
   [

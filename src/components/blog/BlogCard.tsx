@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock, Eye } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { formatDate, getReadingTime, truncate } from '@/lib/utils';
 import { getCategoryGradient } from '@/lib/category-themes';
 import type { BlogPost } from '@/types';
@@ -63,11 +63,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
         <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono pt-3 border-t border-border/40">
           <span className="flex items-center gap-1">
             <Clock className="w-3 h-3" />
-            {getReadingTime(post.content)}
-          </span>
-          <span className="flex items-center gap-1">
-            <Eye className="w-3 h-3" />
-            {post.views}
+            {getReadingTime(post.contentText)}
           </span>
         </div>
       </div>

@@ -28,23 +28,3 @@ export function GoogleAnalytics() {
     </>
   );
 }
-
-// Track page views
-export function trackPageView(url: string) {
-  if (typeof window !== 'undefined' && GA_MEASUREMENT_ID) {
-    (window as any).gtag?.('config', GA_MEASUREMENT_ID, {
-      page_path: url,
-    });
-  }
-}
-
-// Track custom events
-export function trackEvent(action: string, category: string, label?: string, value?: number) {
-  if (typeof window !== 'undefined' && GA_MEASUREMENT_ID) {
-    (window as any).gtag?.('event', action, {
-      event_category: category,
-      event_label: label,
-      value: value,
-    });
-  }
-}

@@ -52,11 +52,12 @@ export async function getGitHubRepos(
   }
 }
 
-export async function getPinnedRepos(): Promise<GitHubRepo[]> {
-  // GitHub API doesn't have a direct endpoint for pinned repos
-  // We'll fetch the most starred repos as a proxy
-  const repos = await getGitHubRepos("stars", 6);
-  return repos.filter((repo) => repo.stargazers_count > 0);
+export function getPinnedRepos(): Promise<GitHubRepo[]> {
+  // GitHub API doesn't have a direct endpoint for pinned repos.
+  // Most-starred is used as a proxy, without filtering out unstarred repos —
+  // day-to-day personal repos often have zero stars, so a > 0 filter would
+  // leave this empty for most accounts.
+  return getGitHubRepos("stars", 6);
 }
 
 export async function getRepoLanguages(

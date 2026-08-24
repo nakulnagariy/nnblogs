@@ -1,16 +1,29 @@
-# NNBlogs & Interview Prep Migration Guide
+# NNBlogs — Project Guide
 
 This file provides context and operational boundaries to Claude Code (`claude.ai/code`) for this repository.
 
 ## Project Summary
 
-Migrating a Svelte interview-prep app (~300-400 files, 13 categories) into this
-existing Next.js 16.1.1 blog platform. The blog already works (auth, posts, Supabase).
-We're ADDING a connected learning platform alongside it.
+A git-native personal blog: Next.js 16.1.1, no database, no authentication
+system. Posts are Markdown/YAML files under `content/posts/`, authored
+locally through Keystatic (`/keystatic`, local storage mode) and published
+by committing and pushing to `main` — GitHub's own PR/merge permissions on
+this repo are the access control, since there is a single author.
+
+An earlier version of this repo used Supabase (DB + Auth) and had grown to
+include Videos, Projects, and an in-progress "Learn" (interview-prep)
+vertical, each with its own DB tables and admin CRUD UI. All of that was
+removed in a single migration (see `git log` on `feat/revamp-nnblog` for the
+phase-by-phase history): Videos folds into posts, Projects is now a
+GitHub-repos widget on `/about`, and Learn was cut entirely rather than
+kept dormant. `docs/` still contains planning artifacts from the Learn
+migration (backlog, epics, rendering plans) — these are historical, not an
+active spec; nothing in `docs/` should be treated as current guidance
+without checking it against the code first.
 
 ## 🛠️ Build & Development Commands
 
-- **Dev Server:** `npm run dev` (Starts server at http://localhost:3000)
+- **Dev Server:** `npm run dev` (Starts server at http://localhost:3000; also serves the Keystatic admin UI at `/keystatic`)
 - **Production Build:** `npm run build` (Runs complete production build and TypeScript check)
 - **TypeScript Only:** `npm run type-check` (`tsc --noEmit`)
 - **Linting:** `npm run lint` (ESLint on `src/`) / `npm run lint:fix` (Auto-fix issues)
@@ -22,99 +35,60 @@ We're ADDING a connected learning platform alongside it.
 ## 📐 Core Tech Stack & Architecture Standards
 
 - **Framework Stack:** Next.js 16.1.1 (App Router), React 19.2.3, Tailwind CSS v4 (with PostCSS), TypeScript 5 (Strict Mode).
-- **Data Flow Layers:** Public pages are Server Components calling `lib/supabase/queries.ts` directly. Client interactive sections use TanStack Query hooks from `hooks/` wrapping those queries. Admin pages POST/PUT/DELETE through `/api/admin/*` routes to `lib/supabase/admin-queries.ts`.
-- **Dual Supabase Client Boundaries:**
-  - `lib/supabase/client.ts` ➡️ Exports `supabase` (Anon key, public read). Used by `queries.ts` for public data fetching.
-  - `lib/supabase/server.ts` ➡️ Exports `supabaseAdmin` (Service role key, bypasses RLS). Used **only** by `admin-queries.ts` for server-side write operations. _Never import this client in Client Components or public routes._
-- **Authentication Boundaries:** Gated strictly by **Supabase Auth** (Migrated completely away from Clerk). Update any legacy references in `middleware.ts` or outdated instruction files when found.
-- **Dynamic Imports:** Heavy components (`MarkdownEditor`, `Dialog`, `GitHubProfile`, `DataVizCharts`) are lazy-loaded via `components/dynamic/index.tsx` with skeleton fallbacks to disable SSR.
-- **API Response Standard:** Route handlers in `app/api/[resource]/route.ts` must validate input before DB operations and return a consistent error structure: `{ error: string }`.
+- **Data Flow Layers:** `/blog` and `/blog/[slug]` are Server Components calling `lib/content/posts.ts` directly — a thin wrapper over `@keystatic/core/reader` reading `content/posts/`. Client-side interactivity is limited to live search (`hooks/usePosts.ts`'s `useSearch`, backed by `/api/search`, using TanStack Query for its debounce/cache behavior) — everything else fetches server-side, since Keystatic's reader uses Node's `fs` and cannot run in the browser.
+- **Content model:** `keystatic.config.ts` defines the `posts` collection schema. Post body content is `fields.markdoc()` (Keystatic's rich-text/WYSIWYG editor) with `format.contentField` splitting it into its own section on disk — `content/posts/<slug>/index.mdoc` (frontmatter block + Markdoc/Markdown body), not `index.yaml`. `BlogPost.content` is the parsed Markdoc AST (`Node`), rendered via `Markdoc.transform()` + `Markdoc.renderers.react()` in `MarkdownRenderer.tsx` with custom node overrides for syntax-highlighted code, heading anchor ids, external-link handling, and figure/figcaption images — see that file's top comment for two non-obvious Markdoc renderer quirks it works around. `BlogPost.contentText` (`Markdoc.format(node)`) is the plain-Markdown-string rendition used by `extractHeadings`/`getReadingTime`/search, so those stayed string-based and untouched.
+- **No database, no auth:** there is no `middleware.ts`, no session/auth check anywhere in the app. Writing a post means running Keystatic locally and committing the result; nothing gates `npm run dev` itself.
+- **API Response Standard:** Route handlers in `app/api/[resource]/route.ts` must validate input and return a consistent error structure: `{ error: string }`.
 
 ## 📦 Key File Registry
 
-| Path                                | Purpose                                                          |
-| :---------------------------------- | :--------------------------------------------------------------- |
-| `src/lib/supabase/queries.ts`       | All public read queries                                          |
-| `src/lib/supabase/admin-queries.ts` | All admin write operations (Service role)                        |
-| `src/types/index.ts`                | Centralized domain models (`BlogPost`, `Video`, `Project`, etc.) |
-| `src/middleware.ts`                 | Supabase Auth route protection configuration                     |
-| `src/components/dynamic/index.tsx`  | Lazily loaded heavy client-side components                       |
-| `tests/setup.ts`                    | Vitest global testing suite setup                                |
+| Path                          | Purpose                                                              |
+| :----------------------------- | :-------------------------------------------------------------------- |
+| `keystatic.config.ts`          | Keystatic collection schema — the source of truth for post fields    |
+| `content/posts/*/index.mdoc`   | Post content, one directory per slug (frontmatter + Markdoc body)     |
+| `src/lib/content/posts.ts`     | All post read queries (file-based, replaces the old Supabase queries)|
+| `src/components/blog/MarkdownRenderer.tsx` | Markdoc AST → React rendering, incl. the node-schema overrides for code/headings/links/images |
+| `src/types/index.ts`           | Centralized domain models (`BlogPost`, `SearchResult`, etc.)         |
+| `src/lib/markdown.ts`          | Pure string utilities only now (`headingToId`, `extractHeadings`) — covered by `tests/lib/markdown.test.ts` |
+| `src/app/globals.css`          | Design tokens — imports `nn-design/tokens.css`, aliases the old shadcn-style utility names (`bg-background`, `text-muted-foreground`, etc.) onto it |
+| `tests/setup.ts`               | Vitest global testing suite setup                                    |
 
 ## 🔑 Environment Variables (`.env.local`)
 
-- `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY` (Secret — Server/Admin contexts only)
-- `GITHUB_USERNAME`, `GITHUB_TOKEN` (Secret)
-- `NEXT_PUBLIC_GA_MEASUREMENT_ID`, `OPENAI_API_KEY` (Secret), `NEXT_PUBLIC_SITE_URL`
+- `GITHUB_USERNAME`, `GITHUB_TOKEN` — powers the repos widget on `/about`; the site works without them, the widget just doesn't render
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` — Google Analytics
+- `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SITE_NAME`, `NEXT_PUBLIC_SITE_DESCRIPTION`
 
-## Source Project Location
-
-The Svelte source files are at: C:\personal projects\Bench-interview-preparation\
-Key content directory: app/static/content/ (13 category folders, ~80 topics)
-Each topic has: notes.md, example.js, assessment.html, flashcards.csv
+Keystatic's local storage mode needs no env vars or secrets of its own.
 
 ## Critical Rules
 
-- NEVER modify existing blog functionality (posts, categories, auth, routes)
-- All new tables are ADDITIVE to the existing schema
-- All DB inserts must use ON CONFLICT / upserts (idempotent)
-- Check docs/migration-prompt-full.md for the complete project specification
-- Check docs/backlog.md for the current agile backlog and task status
-- Check docs/reports/ for research findings and session reports
-
-## Key Commands
-
-- `npm run dev` — Start dev server
-- `npx supabase db push` — Push schema changes
-- `npx ts-node scripts/migration/orchestrator.ts` — Run migration pipeline
-
-## 🚀 Interview Prep Platform Migration Phase
-
-We are actively migrating an external Svelte app (~400 files, 13 categories) from `C:\personal projects\Bench-interview-preparation\` into this codebase as an additive learning platform. The blog engine remains untouched.
-
-### Execution Constraints & Rules
-
-- **Pre-requisite:** Read `docs/migration-prompt-full.md` before starting any migration task. It contains the complete architectural specifications, agile backlog, and system agent matrix.
-- **Idempotency:** All migration pipelines and database interactions must be strictly idempotent (`ON CONFLICT` / upserts).
-- **AI Tracking:** Every piece of automatically generated content must contain the structural flag `is_ai_generated: true`.
-- **Cost Auditing:** All downstream LLM calls must be systematically logged with runtime cost-tracking.
-
-### Detailed Engineering Rules & Custom AI Skills
-
-Deeper domain context, styling frameworks, testing philosophies, and structured workflow steps are delegated to the local workspace directories:
-
-- **Standards:** Look into `.claude/rules/` (`architecture.md`, `frontend.md`, `testing.md`, `security.md`).
-- **Structured Skills:** Look into `.claude/skills/index.md` for deterministic task execution tools (e.g., _Architecture Review_, _Security Audit_, _Performance Audit_).
+- No database, no auth — do not reintroduce either without an explicit ask. If a feature seems to need persistence beyond the content in `content/posts/`, flag it rather than reaching for a DB by default.
+- Post content is a Markdoc AST, not a plain string (see Content model above) — anything that needs plain text (search, reading time, heading extraction) should use `post.contentText`, not `post.content`.
+- Markdoc's react renderer only applies a `components` override to tag names starting with an uppercase letter, and `heading`/`fence`'s default node schemas hardcode their own output tag inside a custom `transform()` that ignores the schema's `render` property — see the top comment in `MarkdownRenderer.tsx` before changing how any node type renders.
+- `src/lib/content/posts.ts`'s exported function signatures (`getPosts`, `getPostBySlug`, `getFeaturedPosts`, `getRecentPosts`, `getRelatedPosts`, `getCategories`, `searchContent`) are relied on by both server components and the search API — keep them stable, or update every call site in the same change.
 
 ---
 
-> UPDATE THIS AFTER EACH SESSION
-> Phase: Implementation
-> Current Epic: Epic 5 — Interview Prep UI
-> Current US: 🚦 Human Gate — US-5.0 through US-5.4 complete, awaiting review
+> Last session: completed the git-native migration end to end (nn-design
+> tokens + spare homepage; Keystatic + content migration off Supabase;
+> single-column Medium-style blog redesign; removed Supabase/auth/videos/
+> projects/learn entirely; GitHub-repos widget on /about; dependency/env/doc
+> cleanup; fixed a max-w-* token collision and a /keystatic rendering bug
+> found after the fact). Then switched post content from a plain text field
+> to Keystatic's Markdoc rich-text editor on request, rewriting
+> MarkdownRenderer accordingly. All committed on `feat/revamp-nnblog`,
+> working tree clean, build/lint/tests all green.
 >
-> Last completed:
-> - US-5.0: SQL migration created — supabase/migrations/20260619000000_promote_topics_to_published.sql
->   ⚠ Still needs to be applied via Supabase SQL editor (run: UPDATE topics SET status = 'published' WHERE status = 'draft')
-> - US-5.1: TypeScript types (TopicCategory, Topic, TopicDetail, etc.), 5 Supabase query functions,
->   3 API routes (/api/learn/categories, /api/learn/[category], /api/learn/[category]/[topic]),
->   and useLearn.ts React Query hooks — all complete
-> - US-5.2: All learn UI components built:
->   DifficultyBadge, TopicCard, TopicCardSkeleton, CategoryCard, TopicDetailTabs,
->   FlashcardDeck, PremiumGate, TopicDetailWrapper, LearnClient, CategoryClient
-> - US-5.3: App Router pages created:
->   /learn (category grid), /learn/[category] (topic list), /learn/[category]/[topic] (detail with tabs)
-> - US-5.4: Header.tsx and MobileMenu.tsx updated with /learn nav link
-> - Search extended to include topics (SearchBar + queries.ts updated)
-> - TypeScript: 0 errors | Lint: 0 new errors (pre-existing warnings only)
->
-> 🚦 GATE REQUIRED: Run the SQL migration in Supabase dashboard, then:
->   npm run dev → visit /learn → verify category grid loads
->   Click a category → verify topic list with difficulty filter
->   Click a topic → verify tabbed content (Notes/Examples/Assessment/Flashcards/Q&A)
->
-> Next action (after gate approval): US-5.5 — Search + Sitemap | US-5.6 — Premium scaffolding stubs
->
-> Key migration commands (Epic 4 — still pending for remaining categories):
->   Full run: npx tsx scripts/migration/orchestrator.ts --categories arrays-objects,async-js,css-html,performance-tooling,practical-js,react-angular,react-fundamentals,react-hooks,react-patterns-architecture,shared,system-design,testing,typescript --approve-gate
+> Known follow-ups, not yet done:
+> - `.claude/rules/*.md` (11 files) and the rest of `docs/` still describe
+>   the old Supabase/Clerk/multi-vertical architecture — accurate as
+>   historical record, actively misleading as current guidance. Worth a
+>   dedicated pass if this repo keeps using the rules/skills framework.
+> - `GITHUB_TOKEN` in `.env.local` returns 401 Bad credentials against the
+>   real GitHub API — needs rotating for the repos widget on `/about` to
+>   show anything in production (unauthenticated requests still work, just
+>   rate-limited).
+> - `/about` page copy still reads like a portfolio ("precision and soul",
+>   availability pulse dot) — out of scope for this migration, flagged for
+>   whoever revisits that page next.
