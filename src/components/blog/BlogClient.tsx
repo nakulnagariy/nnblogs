@@ -93,7 +93,7 @@ export function BlogClient({ posts, page, totalPages, categories, activeCategory
                   <time dateTime={post.created_at}>{formatDate(post.created_at)}</time>
                   <span className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
-                    {getReadingTime(post.content)}
+                    {getReadingTime(post.contentText)}
                   </span>
                 </div>
               </Link>

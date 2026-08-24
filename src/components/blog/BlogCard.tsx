@@ -63,7 +63,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
         <div className="flex items-center gap-3 text-xs text-muted-foreground font-mono pt-3 border-t border-border/40">
           <span className="flex items-center gap-1">
             <Clock className="w-3 h-3" />
-            {getReadingTime(post.content)}
+            {getReadingTime(post.contentText)}
           </span>
         </div>
       </div>

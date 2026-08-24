@@ -1,4 +1,5 @@
 import { createReader } from '@keystatic/core/reader';
+import Markdoc from '@markdoc/markdoc';
 import keystaticConfig from '../../../keystatic.config';
 import type { BlogPost, SearchResult, PaginatedResponse } from '@/types';
 
@@ -6,12 +7,17 @@ const reader = createReader(process.cwd(), keystaticConfig);
 
 type PostEntry = Awaited<ReturnType<typeof reader.collections.posts.read>>;
 
-function toBlogPost(slug: string, entry: NonNullable<PostEntry>): BlogPost {
+async function toBlogPost(slug: string, entry: NonNullable<PostEntry>): Promise<BlogPost> {
+  const resolved =
+    typeof entry.content === 'function' ? await entry.content() : entry.content;
+  const { node } = resolved;
+
   return {
     id: slug,
     title: entry.title,
     slug,
-    content: entry.content,
+    content: node,
+    contentText: Markdoc.format(node),
     excerpt: entry.excerpt,
     featured_image: entry.featuredImage ? `/images/posts/${entry.featuredImage}` : undefined,
     category: entry.category,
@@ -24,11 +30,13 @@ function toBlogPost(slug: string, entry: NonNullable<PostEntry>): BlogPost {
 
 async function allPosts(): Promise<{ slug: string; post: BlogPost; draft: boolean }[]> {
   const entries = await reader.collections.posts.all();
-  return entries.map(({ slug, entry }) => ({
-    slug,
-    post: toBlogPost(slug, entry),
-    draft: entry.draft,
-  }));
+  return Promise.all(
+    entries.map(async ({ slug, entry }) => ({
+      slug,
+      post: await toBlogPost(slug, entry),
+      draft: entry.draft,
+    })),
+  );
 }
 
 function byNewest(a: { post: BlogPost }, b: { post: BlogPost }) {
@@ -113,7 +121,7 @@ export async function searchContent(query: string): Promise<SearchResult[]> {
       (p) =>
         p.post.title.toLowerCase().includes(term) ||
         p.post.excerpt.toLowerCase().includes(term) ||
-        p.post.content.toLowerCase().includes(term),
+        p.post.contentText.toLowerCase().includes(term),
     )
     .map((p) => ({
       id: p.post.id,

@@ -1,9 +1,14 @@
+import type { Node as MarkdocAstNode } from '@markdoc/markdoc';
+
 // Content Types
 export interface BlogPost {
   id: string;
   title: string;
   slug: string;
-  content: string;
+  /** Markdoc AST — render with Markdoc.transform() + Markdoc.renderers.react() (see MarkdownRenderer). */
+  content: MarkdocAstNode;
+  /** Plain-text rendition of `content` via Markdoc.format() — for search, reading time, and heading extraction. */
+  contentText: string;
   excerpt: string;
   featured_image?: string;
   category: string;

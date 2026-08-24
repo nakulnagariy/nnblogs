@@ -9,6 +9,7 @@ export default config({
       label: "Posts",
       slugField: "title",
       path: "content/posts/*/",
+      format: { contentField: "content" },
       previewUrl: "http://localhost:3000/blog/{slug}",
       schema: {
         title: fields.slug({
@@ -49,10 +50,9 @@ export default config({
           description: "Draft posts are hidden from the public site.",
           defaultValue: false,
         }),
-        content: fields.text({
+        content: fields.markdoc({
           label: "Content",
-          multiline: true,
-          description: "Post body in Markdown.",
+          extension: "mdoc",
         }),
       },
     }),

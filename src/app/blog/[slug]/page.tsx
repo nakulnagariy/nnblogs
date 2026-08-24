@@ -43,7 +43,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   if (!post) notFound();
 
   const relatedPosts = await getRelatedPosts(slug, post.category, 3).catch(() => []);
-  const headings = extractHeadings(post.content);
+  const headings = extractHeadings(post.contentText);
 
   return (
     <BlogPostClientWrapper slug={slug} title={post.title} category={post.category}>
@@ -85,7 +85,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </span>
             <span className="flex items-center gap-1.5">
               <Clock className="w-3.5 h-3.5" />
-              {getReadingTime(post.content)}
+              {getReadingTime(post.contentText)}
             </span>
           </div>
         </header>
